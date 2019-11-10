@@ -1,0 +1,26 @@
+// @import "../../theme/theme";
+#loginScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.banner {
+}
+.center-container {
+  // width: 50%;
+}
+.mat-form-field {
+  // width: 100%;
+}
+
+.copy-right {
+  position: absolute;
+  left: 1%;
+  // transform: translateX(-50%);
+  bottom: 0.85%;
+  font-size: 0.75rem;
+  color: #ffffff;
+  z-index: 2;
+}

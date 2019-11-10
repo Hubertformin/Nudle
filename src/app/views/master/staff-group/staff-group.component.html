@@ -1,0 +1,109 @@
+<form action="#" [formGroup]="groupForm">
+  <div class="row">
+    <div class="col-sm-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Role name</mat-label>
+        <input matInput placeholder="Role name"  formControlName="name" required>
+        <mat-hint *ngIf="group_name.invalid && (group_name.dirty || group_name.touched)"><span class="text-red">Please insert a valid name</span></mat-hint>
+      </mat-form-field>
+    </div>
+    <!--<mat-divider [vertical]="true"></mat-divider>-->
+    <div class="col-sm-9 border-l border-theme-default">
+      <h4 class="col-sm-12 text-theme-primary mb-1">Permissions</h4>
+      <section id="permissions_form_group" formGroupName="permissions">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row border-b border-theme-default py-2">
+              <div class="col-sm-3">
+                <strong>Menu items</strong>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="mi_view" formControlName="MENU_ITEMS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="mi_create" formControlName="MENU_ITEMS_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="mi_update" formControlName="MENU_ITEMS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="mi_delete" formControlName="MENU_ITEMS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row border-b border-theme-default py-2">
+              <div class="col-sm-3">
+                <strong>Sales</strong>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="in_view" formControlName="INVOICES_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="in_create" formControlName="INVOICES_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="in_update" formControlName="INVOICES_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="in_delete" formControlName="INVOICES_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row border-b border-theme-default py-2">
+              <div class="col-sm-3">
+                <strong>Reports</strong>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="r_view" formControlName="REPORTS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2 text-center">--</div>
+              <div class="col-sm-2">
+                <mat-checkbox name="r_update" formControlName="REPORTS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="r_update" formControlName="REPORTS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row border-b border-theme-default py-2">
+              <div class="col-sm-3">
+                <strong>Users</strong>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="u_view" formControlName="USERS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="u_create" formControlName="USERS_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="u_update" formControlName="USERS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="u_delete" formControlName="USERS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row border-b border-theme-default py-2">
+              <div class="col-sm-3">
+                <strong>Inventory</strong>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="o_view" formControlName="INVENTORY_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="o_create" formControlName="INVENTORY_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="o_update" formControlName="INVENTORY_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+              </div>
+              <div class="col-sm-2">
+                <mat-checkbox name="o_delete" formControlName="INVENTORY_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</form>

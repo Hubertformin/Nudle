@@ -1,0 +1,25 @@
+#header {
+  height: 15%;
+}
+#body {
+  height: 85%;
+  overflow: auto;
+  position: relative;
+  .card {
+    padding: 0.75rem 0.85rem 0;
+    .title {
+      font-size: 80%;
+    }
+    .text {
+      width: 100%;
+      overflow: hidden;
+      font-size: 1.875rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.section-card {
+  height: 98%;
+}

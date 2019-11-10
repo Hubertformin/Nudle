@@ -1,0 +1,81 @@
+.header {
+  height: 10%;
+}
+.body {
+  height: 90%;
+}
+ ul.chip-list {
+   padding: 0;
+   margin: 0;
+   list-style-type: none;
+   li{
+     &.header {
+       height: 57px;
+       position: relative;
+       input {
+         position: absolute;
+         top: 0;
+         bottom: 0;
+         right: 0;
+         left: 0;
+         // padding: 0 0.6rem 0 1.85rem;
+         color: inherit;
+         background-color: rgba(0, 0, 0, 0);
+       }
+     }
+     &.list-item {
+       cursor: pointer;
+       padding: 0.75rem;
+       position: relative;
+       &.active, &:hover:not(.active-light) {
+         background-color: rgba(0, 0, 0, 0.12);
+       }
+       img {
+         position: absolute;
+         left: 0.8rem;
+         height: 50px;
+         width: 50px;
+       }
+       .text {
+         padding-left: 4.1rem;
+       }
+       &:last-of-type {
+         border-bottom: none;
+       }
+     }
+   }
+ }
+
+ .details {
+   ._user_meta {
+     ._image {
+       position: relative;
+       img {
+         height: 95px;
+         width: 95px;
+       }
+     }
+   }
+   ._detail-action {
+     .pane_1 {
+       height: 18%;
+     }
+     .pane_2 {
+       height: 73%;
+       ._item {
+         height: 15%;
+       }
+       ._action {
+         height: 6%;
+       }
+       ._table {
+         height: 78%;
+       }
+     }
+   }
+ }
+
+ .mat-card {
+   //background-color: inherit;
+   //color: inherit;
+ }

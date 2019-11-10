@@ -1,0 +1,140 @@
+<section id="app-invoices-manager" class="w-full h-full row">
+<!--  nav-->
+  <div class="col-sm-3 border-r h-full border-r border-theme-default" style="padding: 0;">
+    <div class="header pt-20 pb-4 border-b border-theme-default mb-2 px-3">
+      <h3 class="text-theme-primary">Sales Manager</h3>
+    </div>
+    <div class="view-nav px-3">
+      <small>Event</small>
+      <ul class="list mt-2 border-t border-theme-default mb-4 pt-3">
+        <li (click)="getSales($event, 'all')">All Sales</li>
+        <li class="divider"><mat-divider></mat-divider></li>
+        <li class="active" (click)="getSales($event, 'today')">Today</li>
+        <li (click)="getSales($event, 'yesterday')">Yesterday</li>
+        <li (click)="getSales($event, 'this-week')">This Week</li>
+        <li (click)="getSales($event, 'this-month')">This Month</li>
+        <li class="divider"><mat-divider></mat-divider></li>
+<!--        <li>Paid</li>-->
+<!--        <li>Unpaid</li>-->
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-9 px-0">
+    <div class="action shadow-inner border-b border-theme-default relative px-4">
+      <div class="row pt-3">
+        <div class="col-sm-7 flex align-items-center">
+          <h3 class="text-5xl text-theme-accent font-hairline">{{ totalAmountOfMoney | currency: config.get('company_currency')+' ': 'symbol':'1.0' }}</h3>
+        </div>
+        <div class="col-sm-5">
+          <mat-form-field appearance="outline">
+            <input (keyup.enter)="searchSales()" id="searchSalesInput" type="search" placeholder="Search.." matInput />
+            <button (click)="searchSales()" class="px-2" matSuffix><fa-icon [icon]="searchIcon"></fa-icon></button>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <h5 *ngIf="saleItems">Showing <strong>{{saleItems.length}}</strong> record(s).</h5>
+        </div>
+        <div class="col-sm-5">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Chosen a date range</mat-label>
+            <input readonly matInput
+                   placeholder="Choose a date range"
+                   [satDatepicker]="picker" (dateChange)="onDateSelected($event)">
+            <sat-datepicker #picker [rangeMode]="true" [closeAfterSelection]="true" disabled="false">
+            </sat-datepicker>
+<!--            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>-->
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 pt-2 px-0">
+          <span class="mr-2"><button (click)="picker.open()" mat-raised-button class="bg-theme-primary text-theme-bg">Open calendar</button></span>
+        </div>
+      </div>
+      <div class="absolute row text-grey-dark" style="left: 0;bottom: 0;right: 0;height: 24px;">
+<!--        <div class="col-sm-1 cursor-pointer"></div>-->
+<!--        <div class="col-sm-2 cursor-pointer">Sale No</div>-->
+<!--        <div class="col-sm-1 cursor-pointer"></div>-->
+<!--        <div class="col-sm-2 cursor-pointer">Amount</div>-->
+<!--        <div class="col-sm-2 cursor-pointer">Waiter</div>-->
+<!--        <div class="col-sm-3 cursor-pointer"></div>-->
+<!--        <div class="col-sm-2 text-right cursor-pointer">...</div>-->
+      </div>
+    </div>
+    <div class="body overflow-auto py-4 px-3">
+      <!-- placeholder -->
+      <div *ngIf="saleItems.length === 0" class="placeholder w-full h-full flex justify-center align-items-center">
+        <div class="text-center">
+          <img src="assets/images/no-sale-placeholder.png" alt="" class="border p-6 my-3">
+          <h3>Nothing to show.</h3>
+        </div>
+      </div>
+      <!--      list-->
+      <div *ngIf="saleItems.length > 0" class="h-full w-full">
+        <cdk-virtual-scroll-viewport itemSize="50" class="h-full">
+          <div *cdkVirtualFor="let sale of saleItems;let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+            <section class="row align-items-center h-full w-full">
+              <div class="col-sm-1 pr-0">
+                <img style="width: auto;height: auto;" src="assets/images/invoices.png" alt="t" />
+              </div>
+              <div class="col-sm-2">
+                <p class="display-text" [title]="sale.invoiceNumber"><strong>{{sale.invoiceNumber}}</strong></p>
+              </div>
+              <div class="col-sm-1 flex align-items-center justify-center" style="padding: 0;">
+                <span *ngIf="!config.getAllConfig().autocomplete_sales && sale.completed" class="text-green"><fa-icon [icon]="checkIcon"></fa-icon></span>
+                <span *ngIf="!config.getAllConfig().autocomplete_sales && !sale.completed" class="text-red"><fa-icon [icon]="crossIcon"></fa-icon></span>
+              </div>
+              <div class="col-sm-2">
+                <p class="display-text font-bold" title="">{{sale.totalAmount | currency: config.get('company_currency')+' ': 'symbol':'1.0'}}</p>
+              </div>
+              <div class="col-sm-2 text-center">
+              <span *ngIf="config.getAllConfig().assign_waiter" [title]="sale.waiter ? sale.waiter.firstName: '(n/a)'"
+                    class="bg-orange-lightest text-xs text-orange-dark rounded-full px-2 py-1">{{sale.waiter ? sale.waiter.firstName: '(n/a)'}}</span>
+              </div>
+              <div class="col-sm-3 pr-0 text-center">
+                <p class="display-text" [title]="sale.createdAt | date: 'dd-MM-yyyy @ hh:mm a'">{{sale.createdAt | date: 'dd-MM-yyyy @ hh:mm a'}}</p>
+              </div>
+              <div class="col-sm-1 px-0 text-left">
+                <button mat-icon-button [matMenuTriggerFor]="menu" style="border: 1px solid;" class="border-theme-default"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                <mat-menu #menu="matMenu">
+                  <button (click)="view(i)" mat-menu-item><fa-icon [icon]="viewIcon"></fa-icon>&nbsp;&nbsp;View</button>
+                  <button (click)="printSaleItem(i)" mat-menu-item><fa-icon [icon]="printIcon"></fa-icon>&nbsp;&nbsp;Print</button>
+                  <button (click)="toggleSaleStatus(sale.id, sale.completed)" *ngIf="!sale.completed" mat-menu-item><fa-icon [icon]="completeIcon"></fa-icon>&nbsp;&nbsp;Mark as Paid</button>
+                  <button (click)="toggleSaleStatus(sale.id, sale.completed)" *ngIf="sale.completed" mat-menu-item><fa-icon [icon]="uncompletedIcon"></fa-icon>&nbsp;&nbsp;Mark as unpaid</button>
+                  <button mat-menu-item (click)="deleteSale(sale.id)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                </mat-menu>
+              </div>
+            </section>
+          </div>
+        </cdk-virtual-scroll-viewport>
+      </div>
+      <!--
+        =========== VIEW ITEM =============
+      -->
+      <section id="viewSelectedSale" class="modal-inner shadow-inner bg-theme-bg">
+        <section class="py-4 bg-theme-primary px-4 flex align-items-center">
+          <div class="inline-block w-1/4">
+            <button (click)="toggleViewSelected()" mat-button class="bg-theme-bg text-theme-primary">close</button>
+          </div>
+          <div class="inline-block w-3/4 text-right px-4">
+            <button (click)="printSaleItem(selectedSaleItem)" mat-button class="bg-theme-bg text-theme-primary">
+            <fa-icon [icon]="printIcon"></fa-icon>&nbsp;
+            print
+            </button>
+            <span class="ml-3" *ngIf="!config.getAllConfig().autocomplete_sales && (selectedSaleItem ? !selectedSaleItem.completed : false)">
+            <button mat-button class="bg-theme-bg text-theme-primary" (click)="toggleSaleStatus(selectedSaleItem.id, selectedSaleItem.completed)"><fa-icon [icon]="completeIcon"></fa-icon>&nbsp;&nbsp;Mark as Paid</button>
+            </span>
+            <span class="ml-3" *ngIf="!config.getAllConfig().autocomplete_sales && (selectedSaleItem ? selectedSaleItem.completed: false)">
+            <button mat-button class="bg-theme-bg text-theme-primary" (click)="toggleSaleStatus(selectedSaleItem.id, selectedSaleItem.completed)"><fa-icon [icon]="uncompletedIcon"></fa-icon>&nbsp;&nbsp;Mark as unpaid</button>
+            </span>
+            <span class="ml-3">
+            <button mat-button class="bg-theme-bg text-theme-primary" (click)="deleteSale(selectedSaleItem.id)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+            </span>
+
+          </div>
+        </section>
+        <section class="view">
+          <app-view-sales [saleItem]="selectedSaleItem"></app-view-sales>
+        </section>
+      </section>
+    </div>
+  </div>
+</section>

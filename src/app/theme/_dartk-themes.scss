@@ -1,0 +1,282 @@
+/**
+ =================== DARK THEMES
+**/
+
+// PINK
+$nudle-pink-primary: mat-palette($mat-pink, 600, 500, 800);
+$nudle-pink-accent: mat-palette($mat-deep-orange, 600, 200, 800);
+$nudle-pink-theme: mat-dark-theme($nudle-pink-primary, $nudle-pink-accent);
+// class
+body.dark-pink-theme {
+  @include angular-material-theme($nudle-pink-theme);
+  @include sat-datepicker-theme($nudle-pink-theme);
+
+  $primary-color: mat-color($nudle-pink-primary);
+  $primary-color-light: mat-color($nudle-pink-primary, 0.4);
+  $accent-color: mat-color($nudle-pink-accent);
+  $theme-fg: #fff;
+  // $theme-bg: rgba(0,0,0,0.87);
+  $theme-bg: #424242;
+  $theme-border-color: #777676;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .text-theme-bg {
+    color: $theme-bg !important;
+  }
+  .bg-theme-fg {
+    background-color: $theme-fg !important;
+  }
+  .text-theme-primary-light {
+    color: lighten($primary-color, 38%) !important;
+  }
+  .border-theme-default {
+    border-color: $theme-border-color !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom classes
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+
+  // list and actives
+  ul.list {
+    li.active {
+      @extend .text-theme-primary-light;
+      background-color: transparentize($primary-color, 0.8);
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+  // for dark modals
+  .glow-modal {
+    background-color: rgba(0, 0, 0, 0.4);
+    .modal-body {
+      background-color: $theme-bg;
+      color: $theme-fg;
+    }
+  }
+  // top modals
+  .top-modal {
+    background-color: rgba(0, 0, 0, 0.6);
+    .content {
+      background-color: $theme-bg;
+      .header {
+        border-bottom: 1px solid $theme-border-color;
+      }
+    }
+  }
+}
+
+
+
+// PURPLE
+$nudle-purple-primary: mat-palette($mat-purple, 500, 100, 600);
+$nudle-purple-accent: mat-palette($mat-teal, 600, 200, 800);
+$nudle-purple-theme: mat-dark-theme($nudle-purple-primary, $nudle-purple-accent);
+// class
+body.dark-purple-theme {
+  @include angular-material-theme($nudle-purple-theme);
+  @include sat-datepicker-theme($nudle-purple-theme);
+
+  $primary-color: mat-color($nudle-purple-primary);
+  $primary-color-light: mat-color($nudle-purple-primary, 0.4);
+  $accent-color: mat-color($nudle-purple-accent);
+  $theme-fg: #fff;
+  // $theme-bg: rgba(0,0,0,0.87);
+  $theme-bg: #424242;
+  $theme-border-color: #777676;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .text-theme-bg {
+    color: $theme-bg !important;
+  }
+  .bg-theme-fg {
+    background-color: $theme-fg !important;
+  }
+  .text-theme-primary-light {
+    color: lighten($primary-color, 38%) !important;
+  }
+  .border-theme-default {
+    border-color: $theme-border-color !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom classes
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+
+  // list and actives
+  ul.list {
+    li.active {
+      @extend .text-theme-primary-light;
+      background-color: transparentize($primary-color, 0.8);
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  // for dark modals
+  .glow-modal {
+    background-color: rgba(0, 0, 0, 0.4);
+    .modal-body {
+      background-color: $theme-bg;
+      color: $theme-fg;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+  // top modals
+  .top-modal {
+    background-color: rgba(0, 0, 0, 0.6);
+    .content {
+      background-color: $theme-bg;
+      .header {
+        border-bottom: 1px solid $theme-border-color;
+      }
+    }
+  }
+}
+
+
+// ORANGE
+$nudle-orange-primary: mat-palette($mat-orange, 600, 500, 800);
+$nudle-orange-accent: mat-palette($mat-green, 600, 200, 800);
+$nudle-orange-theme: mat-dark-theme($nudle-orange-primary, $nudle-orange-accent);
+// class
+body.dark-orange-theme {
+  @include angular-material-theme($nudle-orange-theme);
+  @include sat-datepicker-theme($nudle-orange-theme);
+
+  $primary-color: mat-color($nudle-orange-primary);
+  $primary-color-light: mat-color($nudle-orange-primary, 0.4);
+  $accent-color: mat-color($nudle-orange-accent);
+  $theme-fg: #fff;
+  // $theme-bg: rgba(0,0,0,0.87);
+  $theme-bg: #424242;
+  $theme-border-color: #777676;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .text-theme-bg {
+    color: $theme-bg !important;
+  }
+  .bg-theme-fg {
+    background-color: $theme-fg !important;
+  }
+  .text-theme-primary-light {
+    color: lighten($primary-color, 38%) !important;
+  }
+  .border-theme-default {
+    border-color: $theme-border-color !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom classes
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+
+  // list and actives
+  ul.list {
+    li.active {
+      @extend .text-theme-primary-light;
+      background-color: transparentize($primary-color, 0.8);
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  // for dark modals
+  .glow-modal {
+    background-color: rgba(0, 0, 0, 0.4);
+    .modal-body {
+      background-color: $theme-bg;
+      color: $theme-fg;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+  // top modals
+  .top-modal {
+    background-color: rgba(0, 0, 0, 0.6);
+    .content {
+      background-color: $theme-bg;
+      .header {
+        border-bottom: 1px solid $theme-border-color;
+      }
+    }
+  }
+}

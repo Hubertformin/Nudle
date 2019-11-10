@@ -1,0 +1,16 @@
+.settings-view-item {
+  position: relative;
+  width: 100%;
+  padding: 0.75rem 2rem;
+  margin-bottom: 1rem;
+  .description {
+    font-size: .875rem;
+    // color: $primary-color;
+  }
+  .action {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

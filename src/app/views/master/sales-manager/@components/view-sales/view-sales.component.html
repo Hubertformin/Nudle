@@ -1,0 +1,44 @@
+<section *ngIf="!saleItem" class="h-full flex justify-center align-items-center">
+  <mat-spinner color="accent" [strokeWidth]="12" [diameter]="50"></mat-spinner>
+</section>
+<section id="" class="pt-8 pb-2 h-full" *ngIf="saleItem">
+  <div class="header px-8">
+    <h1 class="text-theme-primary">Invoice</h1>
+  </div>
+  <div class="details px-8 row">
+    <div class="col-sm-8 px-0">
+      <h3 class="py-4">{{saleItem.invoiceNumber}}</h3>
+      <p><small>Cashier: <strong>{{saleItem.cashier ? saleItem.cashier.firstName + ' ' + saleItem.cashier.lastName: 'n/a'}}</strong></small></p>
+      <p *ngIf="app_config.assign_waiter"><small>Waiter: <strong>{{saleItem.waiter ? saleItem.waiter.firstName + ' ' + saleItem.waiter.lastName : 'n/a'}}</strong></small></p>
+    </div>
+    <div class="col-sm-4 px-0 text-right">
+      <h2 class="text-green py-3">{{saleItem.totalAmount | currency: currency + ' ': 'symbol' : '1.0'}}</h2>
+      <p><strong>{{saleItem.createdAt | date : 'dd-MM-yyyy'}}</strong></p>
+      <mat-divider></mat-divider>
+      <p class="pt-1" *ngIf="!app_config.autocomplete_sales"><span>Status: </span>
+        <small *ngIf="saleItem.completed" class="px-2 py-1 text-green-dark">Paid</small>
+        <small *ngIf="!saleItem.completed" class="px-2 py-1 text-red-dark">Unpaid</small>
+      </p>
+    </div>
+  </div>
+  <div class="px-4 list border-t border-b border-theme-default h-full overflow-auto">
+    <table>
+      <thead class="border-b border-theme-default">
+      <tr>
+        <td class="font-bold">#</td>
+        <td class="font-bold">Name</td>
+        <td class="font-bold">Qty</td>
+        <td class="font-bold">Amount({{currency}})</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let itemCon of saleItem.menuItemConnection; let i = index;" class="border-b border-theme-default">
+        <td>{{i + 1}}</td>
+        <td>{{itemCon.menuItem.name}}</td>
+        <td>{{itemCon.orderQuantity}}</td>
+        <td>{{itemCon.orderQuantity * itemCon.menuItem.unitPrice}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

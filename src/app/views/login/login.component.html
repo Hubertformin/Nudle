@@ -1,0 +1,43 @@
+<section id="loginScreen" class="bg-theme-bg text-theme-fg">
+  <div class="row w-full h-full">
+    <div class="col-sm-6 h-full banner" style="padding: 0;">
+      <img src="assets/images/login-banner.png" alt="" class="h-full w-full">
+    </div>
+    <div class="col-sm-6 h-full row pt-32">
+      <div class="col-sm-12">
+        <div class="text-center">
+<!--          dynamic logo images depending on theme-->
+          <img *ngIf="lightTheme" src="assets/images/logo.png" alt="logo" style="height: auto;width: 190px;position: absolute;bottom: 1%;left: 50%;transform:translateX(-50%)">
+          <img *ngIf="!lightTheme" src="assets/images/logo-light.png" alt="logo" style="height: auto;width: 190px;position: absolute;bottom: 1%;left: 50%;transform:translateX(-50%)">
+        </div>
+      </div>
+      <div class="col-sm-12 px-4 text-center">
+        <form id="loginForm" action="#" class="mx-auto w-3/5" [formGroup]="loginForm">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <input type="text" matInput placeholder="Username" name="username" formControlName="username" />
+              <mat-hint *ngIf="username.invalid && (username.touched || username.dirty)"><span class="text-red">username required.</span></mat-hint>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input type="password" name="password" matInput placeholder="Password" formControlName="password" />
+              <mat-hint *ngIf="password.invalid && (password.dirty || password.touched)"><p class="text-red">password is required.</p></mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="text-center my-3">
+            <button *ngIf="!loading" type="submit" class="px-6 py-2 rounded-full bg-theme-primary text-white w-32">Login</button>
+          </div>
+          <div *ngIf="loading" class="relative flex justify-center">
+            <mat-progress-spinner  mode="indeterminate" diameter="25" strokeWidth="10" color="primary"></mat-progress-spinner>
+          </div>
+          <p *ngIf="loading" class="text-theme-primary my-1"><small>Loading..</small></p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <p class="copy-right">&copy; 2019 SilverSlopescm, All right reserved.</p>
+<!--  <imageUrl src="../../../assets/images/sample_4Asset%204.png" class="absolute" style="bottom: 0;" />-->
+</section>

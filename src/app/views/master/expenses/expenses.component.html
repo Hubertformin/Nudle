@@ -1,0 +1,213 @@
+<section id="expenses" class="relative h-full w-full">
+  <section class="header border-b">
+    <div class="row">
+      <div class="col-sm-4 pt-4">
+        <small class=""><strong>Expenses</strong></small>
+        <h1 class="text-theme-accent text-3xl font-hairline">{{totalCostOfExpenses | currency: config.get('company_currency')+' ': 'symbol' : '1.0'}}</h1>
+      </div>
+      <div class="col-sm-4 pt-8">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Chosen a date range</mat-label>
+          <input readonly matInput
+                 placeholder="Choose a date range"
+                 [satDatepicker]="picker" (dateChange)="onDateSelected($event)">
+          <sat-datepicker #picker [rangeMode]="true" [closeAfterSelection]="true" disabled="false">
+          </sat-datepicker>
+          <!--            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>-->
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2 pt-8 text-right px-3 pb-6">
+            <button mat-raised-button class="bg-theme-primary text-theme-bg" (click)="picker.open()">Open calendar</button>
+      </div>
+      <div class="col-sm-2 pt-8 text-right px-2 pb-6">
+        <button mat-stroked-button class="text-theme-primary" (click)="toggleModal('#simpleExpense')">
+          <fa-icon [icon]="addIcon"></fa-icon> New expense</button>
+<!--            <button mat-stroked-button [matMenuTriggerFor]="expenseMenu">Add new</button>-->
+<!--            <mat-menu #expenseMenu>-->
+<!--              <button (click)="toggleModal('#simpleExpense')" mat-menu-item>Simple expense</button>-->
+<!--              <button (click)="toggleModal('#recurrentExpense')" mat-menu-item>Recurrent expense</button>-->
+<!--            </mat-menu>-->
+      </div>
+    </div>
+  </section>
+<!--  body-->
+  <section class="body row h-full">
+    <div class="col-sm-3 px-0 h-full border-r border-theme-default">
+      <div class="view-nav px-3">
+        <small>Event</small>
+        <ul class="list mt-2 border-t border-theme-default mb-4 pt-3">
+          <li (click)="getExpenses($event, 'all')">All Expenses</li>
+          <li class="divider my-1"><mat-divider></mat-divider></li>
+          <li class="active" (click)="getExpenses($event, 'today')">Today</li>
+          <li (click)="getExpenses($event, 'yesterday')">Yesterday</li>
+          <li (click)="getExpenses($event, 'this-week')">This Week</li>
+          <li (click)="getExpenses($event, 'this-month')">This Month</li>
+<!--          <li class="divider"><mat-divider></mat-divider></li>-->
+          <!--        <li>Paid</li>-->
+          <!--        <li>Unpaid</li>-->
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-9 py-4 h-full w-full">
+<!--      placeholder -->
+      <div *ngIf="expenses.length === 0" class="placeholder w-full h-full flex justify-center align-items-center">
+        <div class="text-center">
+          <img src="assets/images/no-sale-placeholder.png" alt="" class="border p-6 my-3">
+          <h3>Nothing to show.</h3>
+        </div>
+      </div>
+<!--      expenses view-->
+      <div *ngIf="expenses.length > 0" class="w-full h-full">
+        <cdk-virtual-scroll-viewport itemSize="50" class="h-full">
+          <div *cdkVirtualFor="let expense of expenses;let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+            <section class="row align-items-center h-full w-full">
+              <div class="col-sm-1">
+                <img style="width: auto;height: auto;" src="assets/images/invoices.png" alt="t" />
+              </div>
+              <div class="col-sm-2 text-center">
+                <p class="display-text" [title]="expense.category? expense.category: '(n/a)'"><strong>{{expense.category? expense.category: '(n/a)'}}</strong></p>
+              </div>
+              <div class="col-sm-2">
+                <p class="display-text font-bold" title="">{{expense.amount | currency: config.get('company_currency')+' ': 'symbol':'1.0'}}</p>
+              </div>
+              <div class="col-sm-3">
+                <p class="display-text" [title]="expense.createdAt | date: 'dd-MM-yyyy @ hh:mm a'">{{expense.createdAt | date: 'dd-MM-yyyy @ hh:mm a'}}</p>
+              </div>
+              <div class="col-sm-2 text-center">
+                <span class="py-1 text-xs rounded-full px-3 bg-orange-lightest text-orange-dark">{{expense.staff ? expense.staff.firstName : '(n/a)'}}</span>
+              </div>
+              <div class="col-sm-2 text-right">
+                <button mat-icon-button [matMenuTriggerFor]="menu" style="border: 1px solid;" class="border-theme-default"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                <mat-menu #menu="matMenu">
+<!--                  <button (click)="viewExpense(i)" mat-menu-item><fa-icon [icon]="viewIcon"></fa-icon>&nbsp;&nbsp;View</button>-->
+<!--                  <button (click)="toggleEditExpense(i)" mat-menu-item><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>-->
+                  <button mat-menu-item (click)="deleteExpense(expense.id)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                </mat-menu>
+              </div>
+            </section>
+          </div>
+        </cdk-virtual-scroll-viewport>
+      </div>
+    </div>
+  </section>
+<!--  add simple expense modal-->
+  <form (submit)="addExpense()" id="simpleExpense" class="top-modal" [formGroup]="expenseForm">
+    <div class="content">
+      <div class="header">
+        <h1 class="text-theme-primary text-center font-hairline">Add simple expense</h1>
+      </div>
+      <div class="body bg-theme-bg">
+        <div class="row pt-6 pb-6">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>Category</mat-label>
+                  <mat-select formControlName="category">
+                    <mat-option value="Food">Food</mat-option>
+                    <mat-option value="Rents">Rents</mat-option>
+                    <mat-option value="Employees">Employees</mat-option>
+                    <mat-option value="Other expenses">Other expenses</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>Issuer</mat-label>
+                  <input type="text" placeholder="Issuer" matInput readonly [value]="authUser_name" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline">
+                  <mat-label>Amount</mat-label>
+                  <button class="bg-theme-primary text-white text-sm mr-2 py-1 px-2" matPrefix>{{config.get('company_currency')}}</button>
+                  <input type="number" placeholder="Amount" matInput formControlName="amount" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline">
+                  <mat-label>Comments(optional)</mat-label>
+                  <textarea placeholder="Comments(optional)" formControlName="description" cols="30" rows="5" matInput></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer text-right">
+      <span class="mr-2"><button type="submit" class="bg-theme-primary text-theme-bg" mat-button>Add</button></span>
+      <button type="button" (click)="toggleModal('#simpleExpense')" mat-raised-button>cancel</button>
+    </div>
+  </form>
+<!--  add recurrent expense-->
+  <form id="recurrentExpense" class="top-modal">
+    <div class="modal-body bg-theme-bg">
+      <div class="row px-8 pt-6 pb-6">
+        <div class="col-sm-12 pb-5">
+          <h1 class="text-theme-primary font-hairline">Add recurrent expense</h1>
+        </div>
+<!--        modal form-->
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Category</mat-label>
+                <input type="text" placeholder="Category" matInput />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>StaffEntity</mat-label>
+                <input type="text" readonly value="Hubert" matInput />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="outline">
+                <mat-label>Amount</mat-label>
+                <button class="bg-theme-primary text-white text-sm mr-2 py-1 px-2" matPrefix>{{config.get('company_currency')}}</button>
+                <input type="number" placeholder="Amount" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Frequency</mat-label>
+                <input type="number" placeholder="Frequency" matInput />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Interval</mat-label>
+                <mat-select>
+                  <mat-option value="Day">Day(s)</mat-option>
+                  <mat-option value="Week">Week(s)</mat-option>
+                  <mat-option value="Month">Month(s)</mat-option>
+                  <mat-option value="Year">Year(s)</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="outline">
+                <mat-label>Comments(optional)</mat-label>
+                <textarea placeholder="Comments(optional)" cols="30" rows="5" matInput></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+<!--        modal action-->
+        <div class="col-sm-12 py-2">
+          <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-3 text-right">
+              <button class="bg-theme-primary text-white" mat-button>Add</button>
+            </div>
+            <div class="col-sm-3" style="padding: 0;">
+              <button type="button" (click)="toggleModal('#recurrentExpense')" mat-raised-button>cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

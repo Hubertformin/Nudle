@@ -1,0 +1,249 @@
+<section id="app" class="border-t border-theme-default">
+  <!--master pane-->
+  <div id="_app_master" class="master text-theme-fg bg-theme-bg" [ngClass]="{'minimized': !sideNavExpanded}">
+    <section id="sideNav" [ngClass]="{'expanded':sideNavExpanded, 'minimized': !sideNavExpanded}" >
+      <div class="header border-theme-default">
+        <img *ngIf="sideNavExpanded && lightTheme" src="assets/images/logo.png" alt="logo">
+        <img *ngIf="!sideNavExpanded && lightTheme" style="width: auto;height: 96%;" src="assets/images/icon.png" alt="logo">
+<!--        dark theme images-->
+        <img *ngIf="sideNavExpanded && !lightTheme" style="margin-left: 0.5rem;" src="assets/images/logo-light.png" alt="logo">
+        <img *ngIf="!sideNavExpanded && !lightTheme" style="width: auto;height: 96%;margin-left: 0.8rem;" src="assets/images/icon-light.png" alt="logo">
+      </div>
+      <div class="body">
+        <ul class="links">
+          <li class="line border-theme-default">{{ 'SIDENAV.REPORTS.TITLE' | translate}}</li>
+<!--          <li>-->
+<!--            <a mat-ripple routerLink="/master/dashboard" routerLinkActive="active" [matTooltip]="'SIDENAV.REPORTS.DASHBOARD' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" [routerLinkActiveOptions]="{exact: true}">-->
+<!--              <fa-icon [icon]="faTachoMeter"  [styles]="{'margin-right':'0.5rem'}" ></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.REPORTS.DASHBOARD' | translate}}</span>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li *ngIf="authUser.permissions ? authUser.permissions.REPORTS_READ : false">
+            <a mat-ripple routerLink="/master/reports" [matTooltip]="'SIDENAV.REPORTS.REPORTS' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="reportsIcon" [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.REPORTS.REPORTS' | translate}}</span>
+            </a>
+          </li>
+          <li *ngIf="authUser.permissions ? authUser.permissions.REPORTS_READ : false">
+            <a mat-ripple routerLink="/master/users-activity" [matTooltip]="'SIDENAV.REPORTS.USERS_ACTIVITY' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="faUserCog"  [styles]="{'margin-right':'0.5rem'}" ></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.REPORTS.USERS_ACTIVITY' | translate}}</span>
+            </a>
+          </li>
+
+          <li *ngIf="authUser.permissions ? authUser.permissions.REPORTS_READ : false" class="line border-theme-default">{{ 'SIDENAV.SALES.TITLE' | translate}}</li>
+          <li>
+            <a mat-ripple routerLink="/master/point-of-sale" [matTooltip]="'SIDENAV.SALES.INVOICE' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="invoiceIcon"  [styles]="{'margin-right':'0.5rem'}" ></fa-icon>
+              <span [hidden]="!sideNavExpanded">{{ 'SIDENAV.SALES.INVOICE' | translate}}</span></a>
+          </li>
+          <li>
+            <a mat-ripple routerLink="/master/sales-manager" [matTooltip]="'SIDENAV.SALES.RECORDED_INVOICES' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="recordedInvoices"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.SALES.RECORDED_INVOICES' | translate}}</span></a></li>
+          <li>
+            <a mat-ripple routerLink="/master/purchases" [matTooltip]="'SIDENAV.SALES.ORDERS' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active"><fa-icon [icon]="faShoppingBag"  [styles]="{'margin-right':'0.5rem'}"></fa-icon>
+              <span [hidden]="!sideNavExpanded">{{ 'SIDENAV.SALES.ORDERS' | translate}}</span></a></li>
+<!--          <li>-->
+<!--            <a mat-ripple routerLink="/master/waste-events" routerLinkActive="active"><fa-icon [icon]="faCube"  [styles]="{'margin-right':'0.5rem'}" ></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.SALES.WASTE_EVENTS' | translate}}</span></a>-->
+<!--          </li>-->
+
+          <li *ngIf="authUser.permissions ? (authUser.permissions.MENU_ITEMS_READ || authUser.permissions.INVENTORY_READ) : false"class="line border-theme-default">{{ 'SIDENAV.MENU.TITLE' | translate}}</li>
+          <li *ngIf="authUser.permissions ? authUser.permissions.MENU_ITEMS_READ : false">
+            <a mat-ripple routerLink="/master/menuItems" [matTooltip]="'SIDENAV.MENU.MENU_ITEMS' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="faUtensils"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.MENU.MENU_ITEMS' | translate}}</span></a>
+          </li>
+<!--          <li>-->
+<!--            <a mat-ripple routerLink="/master/menuTables" routerLinkActive="active"><fa-icon [icon]="faTable"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.MENU.TABLES' | translate}}</span></a>-->
+<!--          </li>-->
+          <li *ngIf="authUser.permissions ? authUser.permissions.INVENTORY_READ : false">
+            <a mat-ripple routerLink="/master/inventory" [matTooltip]="'SIDENAV.MENU.INVENTORY' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="faBoxes"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.MENU.INVENTORY' | translate}}</span></a>
+          </li>
+<!--          <li>-->
+<!--            <a mat-ripple routerLink="/master/cook-book" routerLinkActive="active"><fa-icon [icon]="faBookOpen"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.MENU.COOK_BOOK' | translate}}</span></a>-->
+<!--          </li>-->
+          <li *ngIf="authUser.permissions ? authUser.permissions.USERS_READ : false" class="line border-theme-default">{{ 'SIDENAV.HUMAN_RESOURCE.TITLE' | translate}}</li>
+          <li *ngIf="authUser.permissions ? authUser.permissions.USERS_READ : false">
+            <a mat-ripple routerLink="/master/staff" [matTooltip]="'SIDENAV.HUMAN_RESOURCE.USERS' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="faUser"  [styles]="{'margin-right':'0.5rem'}"></fa-icon><span [hidden]="!sideNavExpanded">{{ 'SIDENAV.HUMAN_RESOURCE.USERS' | translate}}</span></a>
+          </li>
+
+          <li *ngIf="authUser.isManager" class="line border-theme-default">{{ 'SIDENAV.ORGANIZATION.TITLE' | translate}}</li>
+          <li *ngIf="authUser.isManager">
+            <a mat-ripple routerLink="/master/company" [matTooltip]="'SIDENAV.ORGANIZATION.COMPANY' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="faCompanyIcon"  [styles]="{'margin-right':'0.5rem'}"></fa-icon>
+              <span [hidden]="!sideNavExpanded">{{ 'SIDENAV.ORGANIZATION.COMPANY' | translate}}</span></a>
+          </li>
+<!--          <li>-->
+<!--            <a mat-ripple routerLink="/master/branches" [matTooltip]="'SIDENAV.ORGANIZATION.STORES' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">-->
+<!--              <fa-icon [icon]="faStore"  [styles]="{'margin-right':'0.5rem'}"></fa-icon>-->
+<!--              <span [hidden]="!sideNavExpanded">{{ 'SIDENAV.ORGANIZATION.STORES' | translate}}</span></a>-->
+<!--          </li>-->
+
+          <li class="line border-theme-default">{{ 'SIDENAV.SETTINGS.TITLE' | translate}}</li>
+          <li>
+            <a mat-ripple routerLink="/master/settings/profile" [matTooltip]="'SIDENAV.SETTINGS.PREFERENCES' | translate" [matTooltipDisabled]="sideNavExpanded" matTooltipPosition="right" routerLinkActive="active">
+              <fa-icon [icon]="settings"  [styles]="{'margin-right':'0.5rem'}"></fa-icon>
+              <span [hidden]="!sideNavExpanded">{{ 'SIDENAV.SETTINGS.PREFERENCES' | translate}}</span></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <!--view pane-->
+  <div id="_app_view" class="view border-l border-theme-default bg-theme-bg text-theme-fg"
+       [ngClass]="{'minimized': !sideNavExpanded}">
+    <div id="app_header" class="border-theme-default border-b">
+      <nav>
+        <div class="row">
+          <div class="col-sm-4 text-theme-primary">
+            <fa-icon (click)="toggleSideNav()" [icon]="navBarMenu"  [styles]="{'margin':'0 0.5rem','font-size':'1.2rem'}" size="1x"></fa-icon>
+            <p class="company-name text-theme-primary-light">{{companyName ? companyName.toString().toUpperCase() : "Organization's name"}}</p>
+          </div>
+          <div class="col-sm-8 text-right" style="padding-right: 0;">
+            <div class="row">
+              <div class="col-sm-4">
+<!--                <input #searchInput (keyup.enter)="globalSearch(searchInput.value)" type="search" placeholder="search..">-->
+              </div>
+              <div class="col-sm-8">
+                <ul>
+<!--                  <li>-->
+<!--                    <span class="notifier"><fa-icon [icon]="faQuestionMark" [styles]="{'font-size':'1.4rem'}"></fa-icon></span>-->
+<!--                  </li>-->
+<!--                  notifications -->
+<!--                  <li>-->
+<!--                    <span class="notifier"><fa-icon [icon]="faBell" [styles]="{'font-size':'1.4rem'}"></fa-icon> <span class="badge">9+</span></span>-->
+<!--                  </li>-->
+                  <li>
+                    <button class="user" mat-button [matMenuTriggerFor]="menu">
+                      <img [src]="authUser.imageUrl | image" class="rounded-full" alt="avatar">
+                      {{authUser.userName ? authUser.userName :
+                      authUser.firstName + ' ' + authUser.lastName}}
+                      <fa-icon [icon]="faCheveronDown"></fa-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button [routerLink]="'/master/settings/profile'" mat-menu-item>Profile</button>
+                      <button (click)="logOut()" [routerLink]="'/'" mat-menu-item>Log out</button>
+                    </mat-menu>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div id="app_view">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</section>
+<!--
+================= STATUS BAR=================
+-->
+<section id="app-status-bar" class="border-theme-default text-theme-fg bg-theme-bg">
+  <div class="row align-items-center">
+<!--    LEFT SECTION-->
+    <div id="app-left-status" class="col-sm-3">
+      <span class="inline-block mt-1 h-3 w-3 rounded-full bg-green-dark"
+            [ngClass]="{'bg-green-dark': online, 'bg-grey-dark': !online}"></span>
+      {{ online ? 'online' : 'offline' }}
+    </div>
+<!--    CENTER SECTION-->
+    <div id="app-center-status" class="col-sm-4">
+      <div (click)="downloadUpdatesBg(false)"
+           *ngIf="(downloadingUpdates && updatesDownloadProgress) && !updatesDownloaded" id="backgroundDownloadUpdates" class="row align-items-center">
+        <div class="col-sm-3 px-0 overflow-x-hidden whitespace-no-wrap">
+          <small>Downloading updates..</small>
+        </div>
+        <div class="col-sm-1 px-0">
+          <small><strong>{{updatesDownloadProgress.percent}}%</strong></small>
+        </div>
+        <div class="col-sm-6">
+          <mat-progress-bar [value]="updatesDownloadProgress.percent" color="accent"></mat-progress-bar>
+        </div>
+        <div class="col-sm-2 px-0">
+          <small *ngIf="updatesDownloadProgress.bytesPerSecond">{{getSpeed(updatesDownloadProgress.bytesPerSecond)}}</small>
+        </div>
+      </div>
+    </div>
+<!--    RIGHT SECTION-->
+    <div id="app-right-status" class="col-sm-3"></div>
+  </div>
+</section>
+
+
+<!-- section-->
+<section id="updateModal">
+  <mat-card class="modal-content" *ngIf="updateCheck">
+    <mat-card-header class="justify-center text-theme-primary">
+      <h2 class="title" mat-card-title>Updates available</h2>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="content row">
+        <div class="col-sm-3">
+          <div class="img rounded-full border border-theme-default relative">
+            <img src="assets/images/icon.png" class="rounded-full" alt="pc">
+            <span style="min-height: 2rem;min-width: 2rem;bottom:-7%;transform: scale(0.8);right:-6%;"
+                  class="bg-green-dark text-theme-bg absolute flex justify-center align-items-center rounded-full">
+            <fa-icon [icon]="updateIcon"></fa-icon>
+          </span>
+          </div>
+        </div>
+        <div class="col-sm-9">
+          <h4 class="w-full overflow-hidden whitespace-no-wrap" style="text-overflow: ellipsis;">
+            {{updateCheck.updateInfo.releaseName ? updateCheck.updateInfo.releaseName :  'Nudle v' + updateCheck.updateInfo.version }}
+            {{updateCheck.updateInfo.releaseName ? 'Version: ' + updateCheck.updateInfo.version: ''}}
+          </h4>
+          <div class="pt-5 pb-3 h-32 overflow-auto release-notes">
+            <ul class="pl-6 w-full" style="list-style-type: circle;">
+              <li *ngFor="let notes of updateCheck.updateInfo.releaseNotes.split('|')">{{notes}}</li>
+              <!--                          <li>Fixed recurent update files.</li>-->
+              <!--                          <li>Introducing preview with excel sheets.</li>-->
+              <!--                          <li>Demographic maps with plotter.</li>-->
+            </ul>
+          </div>
+          <div *ngIf="!downloadingUpdates && !updatesDownloaded" class="pt-3">
+            <strong *ngIf="updateCheck.updateInfo.releaseDate">Release Date: </strong>
+            <span>{{updateCheck.updateInfo.releaseDate | date: 'longDate'}}</span>
+          </div>
+          <div *ngIf="(downloadingUpdates && updatesDownloadProgress) && !updatesDownloaded" class="pt-3">
+            <div class="row">
+              <div class="col-sm-4 px-0">
+                <small>Downloading..</small>
+              </div>
+              <div class="col-sm-2">
+                <strong *ngIf="updatesDownloadProgress.percent">{{updatesDownloadProgress.percent}}%</strong>
+              </div>
+              <div class="col-sm-2">
+                <small *ngIf="updatesDownloadProgress.transferred && updatesDownloadProgress.total">
+                  {{updatesDownloadProgress.transferred}}/{{updatesDownloadProgress.total}}
+                </small>
+              </div>
+              <div class="col-sm-4 text-right">
+                <small *ngIf="updatesDownloadProgress.bytesPerSecond">{{getSpeed(updatesDownloadProgress.bytesPerSecond)}}</small>
+              </div>
+            </div>
+            <mat-progress-bar [value]="updatesDownloadProgress.percent"></mat-progress-bar>
+          </div>
+          <!--        updates downloaded placeholder              -->
+          <div *ngIf="!downloadingUpdates && updatesDownloaded" class="pt-3 text-green">
+            <fa-icon [icon]="checkIcon"></fa-icon> updates downloaded
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  <mat-card-actions class="modal-actions">
+    <span class="mr-2">
+      <button class="bg-theme-primary text-theme-bg" (click)="downloadUpdate(true)" *ngIf="!downloadingUpdates&& !updatesDownloaded" mat-raised-button>Download</button></span>
+    <span class="mr-2">
+      <button class="bg-theme-primary text-theme-bg"
+              (click)="downloadUpdatesBg(true)" *ngIf="downloadingUpdates&& !updatesDownloaded" mat-raised-button>Background</button></span>
+    <span class="mr-2">
+      <button (click)="closeUpdateModal(true)" *ngIf="!updatesDownloaded" mat-stroked-button>Cancel</button></span>
+    <!-- if updates downloaded -->
+    <span class="mr-2">
+      <button class="bg-theme-primary text-theme-bg"
+        (click)="installUpdates()" *ngIf="updatesDownloaded" mat-raised-button>Restart</button></span>
+    <span class="mr-2">
+      <button (click)="closeUpdateModal(false)" *ngIf="updatesDownloaded" mat-stroked-button>Done</button></span>
+  </mat-card-actions>
+  </mat-card>
+</section>

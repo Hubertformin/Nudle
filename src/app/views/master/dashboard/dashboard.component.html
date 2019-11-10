@@ -1,0 +1,147 @@
+<section id="view" class="h-full">
+  <div id="preview_pane" *ngIf="globalReports" class="tab-body row px-3 pt-4 pb-3 border-theme-default border-b">
+    <div class="col-sm-3 border-theme-default border-r border-l">
+      <p><small>Gross profits</small></p>
+      <h2 class="text-green-dark"><strong>{{globalReports.grossProfits | currency: currency+' ':'symbol':'1.0'}}</strong></h2>
+      <p *ngIf="yesterdayReports">
+       <span *ngIf="percentage_change(yesterdayReports.grossProfits, todayReports.grossProfits) >= 0" class="increase-percent">
+         <small class="text-green"><fa-icon [icon]="upIcon"></fa-icon>{{percentage_change(yesterdayReports.grossProfits, todayReports.grossProfits)}}%</small>
+         <small> from {{yesterdayReports.createdAt | timeAgo}}.</small>
+       </span>
+       <span *ngIf="percentage_change(yesterdayReports.grossProfits, todayReports.grossProfits) < 0" class="decrease-percent"><small class="text-red">
+         <fa-icon [icon]="dropIcon"></fa-icon>&nbsp;{{percentage_change(yesterdayReports.grossProfits, todayReports.grossProfits) * -1}}%</small>
+         <small> from {{yesterdayReports.createdAt | timeAgo}}.</small>
+       </span>
+      </p>
+    </div>
+    <div class="col-sm-3 border-theme-default border-r">
+      <p><small>Expenses</small></p>
+      <h2 class="text-pink-darker"><strong>{{globalReports.totalExpenses | currency: currency+' ':'symbol':'1.0'}}</strong></h2>
+      <p *ngIf="yesterdayReports">
+       <span *ngIf="percentage_change(yesterdayReports.totalExpenses, todayReports.totalExpenses) >= 0" class="increase-percent">
+         <small class="text-red"><fa-icon [icon]="upIcon"></fa-icon>{{percentage_change(yesterdayReports.totalExpenses, todayReports.totalExpenses)}}%</small><small> from yesterday.</small>
+       </span>
+        <span *ngIf="percentage_change(yesterdayReports.totalExpenses, todayReports.totalExpenses) < 0" class="decrease-percent">
+          <small class="text-green">
+         <fa-icon [icon]="dropIcon"></fa-icon>{{percentage_change(yesterdayReports.totalExpenses, todayReports.totalExpenses) * -1}}%</small>
+          <small> from {{yesterdayReports.createdAt | timeAgo}}.</small>
+       </span>
+      </p>
+    </div>
+    <div class="col-sm-3 border-theme-default border-r">
+      <p><small>Estimated Net Profits</small></p>
+      <h2 class="text-blue-dark"><strong>{{getProfits(globalReports) | currency: currency+' ':'symbol':'1.0'}}</strong></h2>
+      <p *ngIf="yesterdayReports">
+       <span *ngIf="percentage_change(getProfits(yesterdayReports), getProfits(todayReports)) >= 0" class="increase-percent">
+         <small class="text-green"><fa-icon [icon]="upIcon"></fa-icon>{{percentage_change(getProfits(yesterdayReports), getProfits(todayReports))}}%</small>
+         <small> from {{yesterdayReports.createdAt | timeAgo}}.</small>
+       </span>
+        <span *ngIf="percentage_change(getProfits(yesterdayReports), getProfits(todayReports)) < 0" class="decrease-percent"><small class="text-red">
+         <fa-icon [icon]="dropIcon"></fa-icon>{{percentage_change(getProfits(yesterdayReports), getProfits(todayReports)) * -1}}%</small><small> from yesterday.</small>
+       </span>
+      </p>
+    </div>
+    <div class="col-sm-3 border-theme-default border-r">
+      <p><small>Average Daily sales</small></p>
+      <h2 class="text-orange-darkest"><strong>{{globalReports.averageDailySales}}</strong></h2>
+      <p *ngIf="yesterdayReports">
+       <span *ngIf="percentage_change(yesterdayReports.averageDailySales, todayReports.averageDailySales) > 0" class="increase-percent">
+         <small class="text-green"><fa-icon [icon]="upIcon"></fa-icon>{{percentage_change(yesterdayReports.averageDailySales, todayReports.averageDailySales)}}%</small><small> from yesterday.</small>
+       </span>
+        <span *ngIf="percentage_change(yesterdayReports.averageDailySales, todayReports.averageDailySales) < 0" class="decrease-percent"><small class="text-red">
+         <fa-icon [icon]="dropIcon"></fa-icon>{{percentage_change(yesterdayReports.averageDailySales, todayReports.averageDailySales) * -1}}%</small>
+          <small> from {{yesterdayReports.createdAt | timeAgo}}.</small>
+       </span>
+      </p>
+    </div>
+  </div>
+<!--  charts..-->
+  <div id="chart_pane" class="row">
+    <div class="col-sm-9 overflow-auto h-full">
+      <div class="py-4 pl-3 h-full w-full">
+        <canvas baseChart height="420" width="768"
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="'line'"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)">
+        </canvas>
+      </div>
+    </div>
+    <div class="col-sm-3 py-6">
+      <div class="">
+        <mat-card style="padding-bottom: 0;">
+          <small>Low stock items</small>
+          <mat-divider></mat-divider>
+          <div class="pt-3">
+            <ul class="pre-list">
+              <li class="">
+                <span class="icon text-yellow-dark" style="top: 5px;">
+                  <fa-icon [icon]="warnIcon" size="2x"></fa-icon>
+                </span>
+                <span class="text">
+                  <span class="pre"><strong class="text-red-dark">{{lowMenuItems.length}}</strong> low menu item(s)</span>
+                </span>
+                <mat-divider></mat-divider>
+                <p class="text-right pt-1 px-4"><button class="px-4 py-2" mat-ripple>View</button></p>
+              </li>
+            </ul>
+          </div>
+        </mat-card>
+      </div>
+      <div class="my-3">
+        <mat-card style="margin-bottom: 0;">
+          <small>Low inventory</small>
+          <mat-divider></mat-divider>
+          <div class="pt-3">
+            <ul class="pre-list">
+              <li class="">
+                <span class="icon text-yellow-dark" style="top: 5px;">
+                  <fa-icon [icon]="warnIcon" size="2x"></fa-icon>
+                </span>
+                <span class="text">
+                  <span class="pre"><strong class="text-red-dark">{{lowInventoryItems.length}}</strong> low stock item(s)</span>
+                </span>
+                <mat-divider></mat-divider>
+                <p class="text-right pt-1 px-4"><button class="px-4 py-2" mat-ripple>View</button></p>
+              </li>
+            </ul>
+          </div>
+        </mat-card>
+      </div>
+<!--      workshifts-->
+<!--      <div class="my-3">-->
+<!--        <mat-card>-->
+<!--          <p>Low stock Inventory</p>-->
+<!--          <mat-divider></mat-divider>-->
+<!--          <div class="py-3">-->
+<!--            <mat-tab-group>-->
+<!--              <mat-tab label="Monday"></mat-tab>-->
+<!--              <mat-tab label="Tuesday"></mat-tab>-->
+<!--              <mat-tab label="Wednesday"></mat-tab>-->
+<!--              <mat-tab label="Thursday"></mat-tab>-->
+<!--              <mat-tab label="Friday"></mat-tab>-->
+<!--              <mat-tab label="Saturday"></mat-tab>-->
+<!--              <mat-tab label="Sunday"></mat-tab>-->
+<!--            </mat-tab-group>-->
+<!--          </div>-->
+<!--        </mat-card>-->
+<!--      </div>-->
+    </div>
+  </div>
+<!--  low stock items-->
+  <section class="row pt-10 pb-3 px-4">
+    <div class="col-sm-4">
+      <mat-card></mat-card>
+    </div>
+    <div class="col-sm-4">
+      <mat-card></mat-card>
+    </div>
+    <div class="col-sm-4">
+      <mat-card></mat-card>
+    </div>
+  </section>
+</section>

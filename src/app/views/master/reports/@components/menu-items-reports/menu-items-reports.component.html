@@ -1,0 +1,105 @@
+<section id="app_menu_items_reports" class="h-full">
+<!-- menu category summary -->
+  <div class="b-card overflow-auto" style="height: 80%;">
+    <div class="card-content pb-2" style="height: 100%;">
+      <div class="row h-full border-theme-default border-b">
+        <div class="col-sm-3 h-full overflow-auto pr-0">
+          <div class="py-3">
+            <h5>Statistics by category</h5>
+            <mat-divider></mat-divider>
+          </div>
+<!--          list-->
+          <ul class="pre-list h-full">
+            <li *ngFor="let c of menuCategories; let i = index;" class="border-b border-theme-default"
+            style="padding: 0.3rem 0 0.28rem 43px;">
+              <span class="pre-icon text-theme-bg"></span>
+              <span class="text" style="padding: 0;">
+                  <span class="pre">{{c.name | titlecase}}</span>
+                  <small class="text-theme-primary">{{c.amount}}</small>
+                </span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-6 border-theme-default border-r border-l pt-6">
+          <div class="mb-8 text-center">
+            <canvas baseChart
+                    [data]="pieChartData"
+                    [labels]="pieChartLabels"
+                    [chartType]="'pie'"
+                    [options]="pieChartOptions"
+                    [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+            </canvas>
+          </div>
+          <div class="text-center">
+            <span class="mr-3">
+              <button (click)="exportData('excel')" mat-stroked-button><img src="assets/images/excel.png" alt="">&nbsp;Export as Excel</button>
+            </span>
+<!--            <span class="mr-3">-->
+<!--              <button (click)="exportData('pdf')" mat-raised-button color="primary"><img src="assets/images/pdf.png" alt="">&nbsp;Export as PDF</button>-->
+<!--            </span>-->
+          </div>
+        </div>
+        <div class="col-sm-3 h-full overflow-auto">
+          <div class="header">
+            <h5>Most sold</h5>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="body py-4">
+            <ul class="pre-list">
+              <li *ngFor="let m of mostOrderedItems; let i = index;" class="border-b border-theme-default">
+                <span class="icon text-theme-bg" appRandomColor>{{m.name[0].toUpperCase()}}</span>
+                <span class="text">
+                  <span class="pre">{{m.name}}</span>
+                  <small class="text-theme-primary">ordered {{m.orderQuantity}} time(s)</small>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--  menu item reports-->
+  <div class="b-card overflow-auto pb-4 mb-4">
+    <div class="card-content pt-3" style="height: 100%;">
+      <div class="row h-full">
+        <div class="col-sm-3 h-full overflow-auto pr-0 border-r border-theme-default">
+          <div class="header py-3">
+            <h5>Menu items</h5>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="body py-4">
+            <ul class="pre-list">
+              <li *ngFor="let item of menuItems; let i = index;" (click)="previewMenuItem(i)" mat-ripple class="cursor-pointer border-b border-theme-default">
+                <span class="icon text-theme-bg" appRandomColor>{{item.name[0].toUpperCase()}}</span>
+                <span class="text">
+                  <span class="pre">{{item.name | titlecase}}</span>
+                  <small class="text-theme-accent">{{item.amount}}</small>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-9 h-full">
+          <div class="head pt-2 pb-3 border-b border-theme-default" *ngIf="selectedMenuItem.item">
+            <h2 class="text-theme-primary">{{selectedMenuItem.item.name | titlecase}}</h2>
+            <p><small>AMOUNT({{config.getAllConfig().company_currency}})</small></p>
+          </div>
+          <div style="display: block;">
+            <canvas baseChart width="600" height="350"
+                    [datasets]="selectedMenuItem.lineChartData"
+                    [labels]="selectedMenuItem.lineChartLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

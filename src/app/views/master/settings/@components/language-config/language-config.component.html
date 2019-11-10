@@ -1,0 +1,51 @@
+<section>
+  <h3 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Language</h3>
+  <div class="body">
+    <div class="settings-view-item">
+      <h4 class="title">Default language</h4>
+      <div class="w-1/3">
+        <mat-form-field appearance="outline">
+          <mat-select [value]="language" (selectionChange)="languageChange($event.value)">
+            <mat-option value="en">English</mat-option>
+<!--            <mat-option value="fr">Fran&ccedil;aise</mat-option>-->
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <h3 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Region</h3>
+  <div class="body px-4">
+    <div class="w-1/2">
+      <div class="mb-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <mat-select (selectionChange)="countrySelected($event.value)" [value]="company_country">
+            <mat-option *ngFor="let country of supportedLocales;let i = index" [value]="country.name">{{country.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="outline">
+          <mat-label>State/Province</mat-label>
+          <mat-select (selectionChange)="stateSelected($event.value)" [value]="country_state">
+            <mat-option *ngFor="let state of statesModel;let i = index" [value]="state">{{state}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <mat-select (selectionChange)="citySelected($event.value)" [value]="country_city">
+            <mat-option *ngFor="let city of cityModel;let i = index" [value]="city.name">{{city.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Currency</mat-label>
+          <input type="text" readonly (change)="setCurrency($event.target.value)" [value]="currencyModel" matInput>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</section>

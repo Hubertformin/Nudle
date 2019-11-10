@@ -1,0 +1,38 @@
+<section id="view">
+  <section class="intro px-12 py-5 bg-green-dark text-white">
+    <h3 class="text-green">Cook book</h3>
+    <p>
+      The recipes of your menu items. You can add a new recipe in two ways
+    </p>
+    <ul>
+      <li>Adding ingredients and procedure when creating or updating a menut item.</li>
+      <li>Click on the add button bellow</li>
+    </ul>
+    <p class="p-5 text-center">
+      <button mat-button color="primary" class="bg-white">Add recipe</button>
+    </p>
+  </section>
+
+  <section class="body px-8 py-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <mat-card>
+          <mat-card-header>
+            Cheese burger
+          </mat-card-header>
+          <mat-card-content>
+            <div class="card-body">
+              <div class="contents">
+                <p><fa-icon [icon]="cookTimeIcon"></fa-icon> 28 mins</p>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>View</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+</section>

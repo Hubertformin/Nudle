@@ -1,0 +1,114 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+@import '~saturn-datepicker/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$nudle-default-primary: mat-palette($mat-green, 700, 300, 600);
+$nudle-default-accent: mat-palette($mat-pink, 600, 200, 800);
+// The warn palette is optional (defaults to red).
+$nudle-default-warn: mat-palette($mat-red);
+// Create the theme object (a Sass map containing all of the palettes).
+$nudle-default-theme: mat-light-theme($nudle-default-primary, $nudle-default-accent, $nudle-default-warn);
+
+// variables
+$light-background-deg: 0.8;
+
+/**
+***************************************************************************************
+================================== Default theme ======================================
+***************************************************************************************
+*/
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($nudle-default-theme);
+@include sat-datepicker-theme($nudle-default-theme);
+// teal: #35bfa3;
+// $custom-green: #38C172;
+$primary-color: #1f9d55;
+//$primary-color: #006837;
+$primary-color-light: mat-color($nudle-default-primary, 0.4);
+$accent-color: mat-color($nudle-default-accent);
+$theme-bg: #fff;
+$theme-fg: rgba(0,0,0,0.67);
+$theme-border-color: #ddd;
+
+.bg-theme-primary {
+  background-color: $primary-color !important;
+}
+.bg-theme-accent {
+  background-color: $accent-color !important;
+}
+.text-theme-primary, .text-theme-primary-light {
+  color: $primary-color !important;
+}
+.text-theme-accent {
+  color: $accent-color !important;
+}
+.bg-theme-bg {
+  background-color: $theme-bg !important;
+}
+.text-theme-fg {
+  color: $theme-fg !important;
+}
+.text-theme-bg {
+  color: $theme-bg !important;
+}
+.bg-theme-fg {
+  background-color: $theme-fg !important;
+}
+.border-theme-default {
+  border-color: $theme-border-color !important;
+}
+.border-theme-primary {
+  border-color: $primary-color !important;
+}
+
+#sideNav a.active {
+  background-color: transparentize($primary-color, 0.6);
+}
+// list and actives
+ul.list {
+  li.active {
+    background-color: transparentize($primary-color, 0.8);
+    color: $primary-color;
+    border-left: 3px solid $primary-color;
+  }
+  &.view-nav {
+    li.active {
+      color: $primary-color;
+    }
+  }
+}
+.tabs-list li.active {
+  color: $primary-color;
+  &::after {
+    border: 1.9px solid $primary-color;
+  }
+}
+// for active backgrounds with light active primary color
+.active-light {
+  background-color: transparentize($primary-color, $light-background-deg);
+}
+
+
+/**
+============================================================
+==================OTHER THEMES: Light themes ===========================
+============================================================
+*/
+@import "light-themes";
+/*
+=================================================================================
+============================ DARK THEMES ========================================
+================================================================================
+ */

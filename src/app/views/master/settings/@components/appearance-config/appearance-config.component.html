@@ -1,0 +1,61 @@
+<section>
+  <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Appearance</h2>
+<!--  <section class="row pb-6">-->
+<!--    <div class="col-sm-6">-->
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>Font style</mat-label>-->
+<!--        <mat-select (selectionChange)="config.setFontStyle($event.value)">-->
+<!--          <mat-option value="inherit">Default</mat-option>-->
+<!--          <mat-option value="serif">Serif</mat-option>-->
+<!--          <mat-option value="monospace">Monospace</mat-option>-->
+<!--          <mat-option value="fantasy">Fantasy</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </section>-->
+  <section class="_app_themes">
+    <h3 class="text-theme-primary mb-3">Theme</h3>
+    <div class="">
+      <h4 class="">themes</h4>
+      <div class="px-8 py-6">
+        <!--default theme box-->
+        <div (click)="changeTheme($event, 'default-theme', true)" class="theme-box default-theme" [ngClass]="{'active': theme === 'default-theme'}">
+          <span *ngIf="theme === 'default-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>
+        </div>
+        <!-- red theme box-->
+        <div (click)="changeTheme($event, 'light-pink-theme', true)" class="theme-box pink-theme" [ngClass]="{'active': theme === 'light-pink-theme'}">
+          <span *ngIf=" theme === 'light-pink-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>
+        </div>
+        <!-- teal theme box-->
+        <div (click)="changeTheme($event, 'light-teal-theme', true)" class="theme-box teal-theme" [ngClass]="{'active': theme === 'light-teal-theme'}">
+          <span *ngIf="theme === 'light-teal-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>
+        </div>
+        <!-- blue theme box-->
+        <div (click)="changeTheme($event, 'light-blue-theme', true)" class="theme-box blue-theme" [ngClass]="{'active': theme === 'light-blue-theme'}">
+          <span *ngIf="theme === 'light-blue-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>
+        </div>
+        <!-- orange theme box-->
+        <div (click)="changeTheme($event, 'light-orange-theme', true)" class="theme-box bg-orange" [ngClass]="{'active': theme === 'light-orange-theme'}">
+          <span *ngIf="theme === 'light-orange-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>
+        </div>
+      </div>
+    </div>
+<!--    <div id="datk-themes-con" class="">-->
+<!--      <h4 class="">Dark themes</h4>-->
+<!--      <div class="px-8 py-6">-->
+<!--        &lt;!&ndash; pink theme box&ndash;&gt;-->
+<!--        <div (click)="changeTheme($event, 'dark-pink-theme', false)" class="theme-box dark-pink" [ngClass]="{'active': theme === 'dark-pink-theme'}">-->
+<!--          <span *ngIf="theme === 'dark-pink-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; purple theme box&ndash;&gt;-->
+<!--        <div (click)="changeTheme($event,'dark-purple-theme', false)" class="theme-box dark-purple" [ngClass]="{'active': theme === 'dark-purple-theme'}">-->
+<!--          <span *ngIf="theme === 'dark-purple-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; orange theme box&ndash;&gt;-->
+<!--        <div (click)="changeTheme($event,'dark-orange-theme', false)" class="theme-box dark-orange" [ngClass]="{'active': theme === 'dark-orange-theme'}">-->
+<!--          <span *ngIf="theme === 'dark-orange-theme'" class="active-icon"><fa-icon [icon]="checkIcon"></fa-icon></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+  </section>
+</section>

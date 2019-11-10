@@ -1,0 +1,420 @@
+<section id="menu" class="h-full">
+  <section id="header" class="">
+    <div class="row pt-4 px-6">
+      <div class="col-sm-7">
+        <h3 class="text-theme-primary"><fa-icon [icon]="menuItemIcon"></fa-icon> Menu Items</h3>
+        <small>Menu items and categories.</small>
+      </div>
+      <div *ngIf="authUser.permissions.MENU_ITEMS_CREATE" class="col-sm-5 text-right">
+        <span><button (click)="toggleCreateMenuItemMode()" mat-stroked-button class="border-theme-default text-theme-primary"><fa-icon [icon]="createIcon"></fa-icon> Add menu item</button></span>
+        <span class="ml-3"><button (click)="toggleCategoryCreateMode()" mat-stroked-button class="border-theme-default text-theme-primary"><fa-icon [icon]="createIcon"></fa-icon> Add category</button></span>
+      </div>
+    </div>
+  </section>
+  <section id="body">
+    <mat-tab-group class="h-full">
+      <mat-tab class="h-full relative" label="Menu items">
+        <!-- place holder incase there is no menu items-->
+        <section *ngIf="menuItems.length < 1" class="fill-element bg-theme-bg flex justify-center align-items-center">
+          <div class="text-center">
+            <img src="assets/images/no_menu_items.png" alt="no_items">
+            <p class="pt-2 pb-4">No menu items.</p>
+            <button *ngIf="authUser.permissions.MENU_ITEMS_CREATE" (click)="toggleCreateMenuItemMode()" mat-raised-button class="bg-theme-accent text-theme-bg">
+            <fa-icon [icon]="createIcon"></fa-icon> Add menu item</button>
+          </div>
+        </section>
+
+        <div class="view-body">
+          <div class="action border-b">
+            <div class="row">
+              <div class="col-sm-8"></div>
+              <div class="col-sm-4 pt-5">
+                <div class="search-box">
+                  <input (keyup)="searchMenuItems()" id="searchInput" type="text" class="py-2 px-3 border border-r-0 rounded-tl rounded-bl w-3/4" placeholder="Search.." />
+                  <button (click)="searchMenuItems()" class="search-btn px-4 border border-theme-default rounded-tr rounded-br" mat-ripple><fa-icon [icon]="searchIcon"></fa-icon></button>
+                </div>
+              </div>
+            </div>
+            <div class="list-title row">
+              <div class="col-sm-12 px-4">
+                <div class="row">
+                  <div class="col-sm-1"></div>
+                  <div class="col-sm-2"><small class="cursor-pointer">Name</small></div>
+                  <div class="col-sm-2"><small class="cursor-pointer">Price</small></div>
+                  <div class="col-sm-2"><small class="cursor-pointer">Category</small></div>
+                  <div class="col-sm-2"><small class="cursor-pointer">Modified by</small></div>
+                  <div class="col-sm-2"><small class="cursor-pointer">Date modified</small></div>
+                  <div class="col-sm-1"><small class="cursor-pointer">Action</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="list pt-4 px-2 pb-6 relative">
+            <!--            search view-->
+            <div id="searchMenuRes" class="searchResults bg-theme-bg px-2 pt-4 overflow-auto">
+              <!--              place holder-->
+              <div *ngIf="mItemsSearchResults.length === 0" class="h-full flex justify-center align-items-center">
+                <h3 class="">No results.</h3>
+              </div>
+<!--              -->
+              <div *ngFor="let mItem of mItemsSearchResults;let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+                <div class="row align-items-center h-full w-full">
+                  <div class="col-sm-1">
+                    <span class="h-4 w-4 random-bg img-icon relative" appRandomColor>
+                      {{mItem.name[0].toUpperCase()}}
+                      <span *ngIf="mItem.stackable" style="min-height: 2rem;min-width: 2rem;bottom:-15%;transform: scale(0.7);right:-19%;"
+                            class="bg-theme-accent border text-theme-bg absolute flex justify-center align-items-center rounded-full">
+                      {{mItem.quantity}}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="col-sm-2">
+                    <p class="display-text">{{mItem.name | titlecase}}</p>
+                  </div>
+                  <div class="col-sm-2 font-bold">{{mItem.unitPrice | currency: currency + ' ':'symbol': '1.0'}}</div>
+                  <div class="col-sm-2">
+                    <small class="bg-teal-lightest text-teal-dark text-xs py-1 px-2 rounded-full">
+                      {{mItem.category ? mItem.category.name: '(n/a)'}}
+                    </small>
+                  </div>
+                  <div class="col-sm-2">
+                    <small class="bg-orange-lightest text-orange-dark text-xs py-1 px-2 rounded-full">{{mItem.staff ? mItem.staff.firstName : '(n/a)'}}</small>
+                  </div>
+                  <div class="col-sm-2 text-sm">{{mItem.updatedAt | timeAgo}}</div>
+                  <div class="col-sm-1" *ngIf="authUser.permissions.MENU_ITEMS_UPDATE || authUser.permissions.MENU_ITEMS_DELETE" >
+                    <button mat-icon-button [matMenuTriggerFor]="menuRole" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                    <mat-menu #menuRole="matMenu">
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_UPDATE" mat-menu-item (click)="toggleUpdateMenuItemMode(i)"><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+                      <button *ngIf="mItem.stackable && authUser.permissions.MENU_ITEMS_UPDATE" mat-menu-item (click)="toggleItemQuantity(i)">
+                        <fa-icon [icon]="modifyQtyIcon"></fa-icon>&nbsp;&nbsp;Modify Quantity
+                      </button>
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_DELETE" mat-menu-item (click)="deleteMenuItem(mItem.id, i)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <cdk-virtual-scroll-viewport itemSize="50" class="h-full">
+              <div *cdkVirtualFor="let mItem of menuItems;let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+                <div class="row align-items-center h-full w-full">
+                  <div class="col-sm-1">
+                    <span class="h-4 w-4 random-bg img-icon relative" appRandomColor>
+                      {{mItem.name[0].toUpperCase()}}
+                      <span *ngIf="mItem.stackable" style="min-height: 2rem;min-width: 2rem;bottom:-15%;transform: scale(0.7);right:-19%;"
+                            class="bg-theme-accent border text-theme-bg absolute flex justify-center align-items-center rounded-full">
+                      {{mItem.quantity}}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="col-sm-2">
+                    <p class="display-text">{{mItem.name | titlecase}}</p>
+                  </div>
+                  <div class="col-sm-2 font-bold">{{mItem.unitPrice | currency: currency + ' ':'symbol': '1.0'}}</div>
+                  <div class="col-sm-2">
+                    <small class="bg-teal-lightest text-teal-dark text-xs py-1 px-2 rounded-full">
+                      {{mItem.category ? mItem.category.name: '(n/a)'}}
+                    </small>
+                  </div>
+                  <div class="col-sm-2">
+                    <small class="bg-orange-lightest text-orange-dark text-xs py-1 px-2 rounded-full">{{mItem.staff ? mItem.staff.firstName : '(n/a)'}}</small>
+                  </div>
+                  <div class="col-sm-2 text-sm">{{mItem.updatedAt | timeAgo}}</div>
+                  <div class="col-sm-1" *ngIf="authUser.permissions.MENU_ITEMS_UPDATE || authUser.permissions.MENU_ITEMS_DELETE">
+                    <button mat-icon-button [matMenuTriggerFor]="menuRole" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                    <mat-menu #menuRole="matMenu">
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_UPDATE" mat-menu-item (click)="toggleUpdateMenuItemMode(i)"><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+                      <button *ngIf="mItem.stackable && authUser.permissions.MENU_ITEMS_UPDATE" mat-menu-item (click)="toggleItemQuantity(i)">
+                        <fa-icon [icon]="modifyQtyIcon"></fa-icon>&nbsp;&nbsp;Modify Quantity
+                      </button>
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_DELETE" mat-menu-item (click)="deleteMenuItem(mItem.id, i)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </div>
+            </cdk-virtual-scroll-viewport>
+          </div>
+        </div>
+      </mat-tab>
+
+<!--      categories tab-->
+
+      <mat-tab class="h-full" label="Categories">
+
+        <!-- place holder incase there is no menu categories -->
+        <section *ngIf="menuCategories.length < 1" class="fill-element bg-theme-bg flex justify-center align-items-center">
+          <div class="text-center">
+            <img src="assets/images/no_menu_items.png" alt="no_items">
+            <p class="pt-2 pb-4">No Categories.</p>
+            <button *ngIf="authUser.permissions.MENU_ITEMS_CREATE" (click)="toggleCategoryCreateMode()" mat-raised-button class="bg-theme-accent text-theme-bg">
+              <fa-icon [icon]="createIcon"></fa-icon> Add category</button>
+          </div>
+        </section>
+
+        <div class="h-full">
+          <!--            card items-->
+          <div class="view-body">
+            <div class="action border-b">
+<!--              <div class="row">-->
+<!--                <div class="col-sm-1"></div>-->
+<!--                <div class="col-sm-4 pt-5">-->
+<!--                  <input type="search" class="py-2 px-3 border border-r-0 rounded-tl rounded-bl w-3/4" placeholder="Search items.." />-->
+<!--                  <select name="" class="border rounded-tr rounded-br py-2 px-1 w-1/4">-->
+<!--                    <option value="">Filter</option>-->
+<!--                    <option value="">Role</option>-->
+<!--                    <option value="">Name</option>-->
+<!--                  </select>-->
+<!--                </div>-->
+<!--              </div>-->
+              <div class="list-title row">
+                <div class="col-sm-9 px-4">
+                  <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-4"><small class="cursor-pointer">Name</small></div>
+                    <div class="col-sm-2"><small class="cursor-pointer"></small></div>
+                    <div class="col-sm-4 text-right"><small class="cursor-pointer">Date modified</small></div>
+                    <div class="col-sm-1"><small class="cursor-pointer">Action</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list px-4 pt-4 pb-6">
+              <div *ngFor="let category of menuCategories;let i = index;" class="h-card col-sm-9 shadow border border-theme-default mb-2 rounded h-16">
+                <div class="row align-items-center h-full w-full">
+                  <div class="col-sm-2">
+                    <span class="h-4 w-4 random-bg img-icon" appRandomColor>{{category.name[0].toUpperCase()}}</span>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="display-text">{{category.name | titlecase}}</p>
+                  </div>
+                  <div class="col-sm-1">
+                    <!--<span class="px-2 py-1 text-xs rounded-full text-green-darker bg-green-lightest">Active</span>-->
+                  </div>
+                  <div class="col-sm-4 text-right text-sm">{{category.updatedAt | timeAgo}}</div>
+                  <div class="col-sm-1" *ngIf="authUser.permissions.MENU_ITEMS_UPDATE || authUser.permissions.MENU_ITEMS_UPDATE">
+                    <button mat-icon-button [matMenuTriggerFor]="menuRole" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                    <mat-menu #menuRole="matMenu">
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_UPDATE" mat-menu-item (click)="toggleCategoryUpdateMode(i)"><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+                      <button *ngIf="authUser.permissions.MENU_ITEMS_DELETE" mat-menu-item (click)="deleteCategory(category.id)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
+<!--  create category item-->
+  <section id="createMenuCategory" class="top-modal">
+    <div class="small-view shadow-md w-1/2 p-6 bg-theme-bg">
+      <div class="content z-depth">
+        <div class="header border-b text-center">
+          <h4 class="text-theme-primary">{{CATEGORY_FORM_ACTION_CREATE ? 'Create Menu Category' : 'Edit Category'}}</h4>
+        </div>
+        <div class="body text-center" [formGroup]="categoryForm">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Category name</mat-label>
+            <input placeholder="Category name" formControlName="name" type="text" matInput (keyup.enter)="categoryFormAction()" cdkFocusInitial />
+            <mat-hint *ngIf="category_name.invalid && (category_name.dirty || category_name.touched)"><span class="text-red">Please enter a valid category name</span></mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="footer text-right">
+        <span class="mr-2">
+           <button (click)="toggleModal('#createMenuCategory')" mat-raised-button>cancel</button>
+        </span>
+        <span>
+          <button (click)="categoryFormAction()" mat-ripple mat-raised-button class="bg-theme-primary text-theme-bg">Save</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- create inventory modal-->
+  <section id="createMenuItem" class="top-modal">
+
+    <div class="content">
+      <div class="header">
+        <h4 class="text-theme-primary">Add Menu Item</h4>
+      </div>
+
+      <div class="body" style="padding: 0;">
+        <form action="#" class="w-full h-full" [formGroup]="actionForm">
+          <div class="row h-full">
+            <div class="col-sm-9 border-r h-full py-10 overflow-y-auto">
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input type="text" matInput placeholder="Name" formControlName="name" required />
+                    <mat-hint *ngIf="name.invalid && (name.touched || name.dirty)"><span class="text-red">Please insert a valid name</span></mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Category</mat-label>
+                    <mat-select (selectionChange)="onCategorySelect($event)" formControlName="category_id">
+                      <mat-option *ngFor="let category of menuCategories;let i = index;" [value]="category.id">{{category.name}}</mat-option>
+                      <mat-option disabled="true" *ngIf="menuCategories.length === 0">No categories</mat-option>
+                      <mat-option value="createCategory" class="border-t border-theme-default">+ Add category</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-6">
+                  <mat-checkbox name="stackable" formControlName="stackable">Stackable</mat-checkbox>
+                  <div *ngIf="stackable.value">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Quantity in stock</mat-label>
+                      <input type="number" matInput placeholder="Quantity in stock" min="0" formControlName="quantity">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <!--sale section-->
+              <h4 class="text-theme-primary p-3 border-b">Sale</h4>
+              <div class="row py-4">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Price ({{currency}})</mat-label>
+                    <input type="number" matInput placeholder="Price" formControlName="unitPrice" required />
+                    <mat-hint *ngIf="unitPrice.invalid && (unitPrice.touched || unitPrice.dirty)"><span class="text-red">Please insert price</span></mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>POS Code</mat-label>
+                    <input type="text" matInput placeholder="POS Code" formControlName="posCode" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- More details -->
+              <mat-accordion *ngIf="!stackable.value">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <fa-icon [icon]="createIcon"></fa-icon>&nbsp;More details
+                    </mat-panel-title>
+                    <mat-panel-description> Add more details</mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <!-- Ingredients section-->
+                  <h4 class="text-theme-primary p-3 border-b">Ingredients</h4>
+                  <div class="row pt-2">
+                    <div class="col-sm-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Inventory item</mat-label>
+                        <mat-select formControlName="inventory_id">
+                          <mat-option *ngFor="let item of inventoryItems" [value]="item.id">{{item.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Quantity</mat-label>
+                        <input (keyup.enter)="selectInventoryItem()" type="number" matInput placeholder="Quantity" formControlName="ingredient_quantity" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                      <button (click)="selectInventoryItem()" type="button" mat-raised-button color="accent" class="text-white">Add</button>
+                    </div>
+                  </div>
+                  <div class="ig-box">
+                    <div class="w-full selected-inventory">
+                      <p *ngIf="selectedInventoryItems.length === 0" style="line-height: 148px;text-align: center;">
+                        Select inventory item and specify quantity to add to ingredient list..
+                      </p>
+                      <ul *ngIf="selectedInventoryItems.length > 0">
+                        <li *ngFor="let item of selectedInventoryItems;let i = index">
+                          <input type="number" class="in_list_put" [(ngModel)]="item.quantity" [ngModelOptions]="{standalone: true}">
+                          <strong>{{item.units}}</strong> of <strong>{{item.name}}</strong>
+                          <span class="float-right cursor-pointer py-1 px-2 rounded-full text-xs  border" (click)="removeInventoryItem(i)"><fa-icon [icon]="deleteIcon"></fa-icon> remove</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- procedure-->
+                  <h4 class="text-theme-primary p-3 border-b">Procedure</h4>
+                  <div class="row py-4">
+                    <div class="w-full">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Cook time (in mins)</mat-label>
+                        <input type="number" matInput placeholder="Cook time" formControlName="cookTime" />
+                      </mat-form-field>
+                    </div>
+                    <div class="w-full">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Cook instructions</mat-label>
+                        <textarea matInput placeholder="Cook instructions" rows="4" formControlName="procedureDescription"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+            <div class="col-sm-3 p-4 bg-theme-primary text-white">
+              <h3 class="mb-2">New menu item.</h3>
+              <div class="pl-4">
+                <p class="mb-4">
+                  Specify stackable if item is being added to a stock.
+                </p>
+                <p class="mb-4">
+                  Pos codes can be used instead of names when searching menu items on point of sale page.
+                </p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer text-right shadow-inner">
+      <span>
+        <button (click)="toggleModal('#createMenuItem')" mat-raised-button>cancel</button>
+      </span>
+      <span class="ml-2">
+        <button (click)="menuItemFormAction()" [disabled]="dbOperation" mat-raised-button class="bg-theme-primary text-theme-bg">{{dbOperation ? 'saving..' : 'save'}}</button>
+      </span>
+    </div>
+  </section>
+
+  <!-- modify item's quantity -->
+  <section id="modifyItemsQuantity" class="top-modal">
+    <div class="small-view shadow-md w-1/2 p-6 bg-theme-bg">
+      <div class="content z-depth">
+        <div class="header border-b text-center">
+          <h4 class="text-theme-primary">Modify {{modifyItem_name.value}}'s quantity</h4>
+        </div>
+        <div class="body row text-center" [formGroup]="modifyItemsQuantityForm" style="padding: 0.75rem">
+          <div class="col-sm-4 px-0">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>Mode</mat-label>
+              <mat-select formControlName="mode">
+                <mat-option value="1">Add</mat-option>
+                <mat-option value="0">Deduct</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>Quantity</mat-label>
+              <input placeholder="Quantity" formControlName="changeQuantity" type="text" matInput (keyup.enter)="modifyItemQuantity()" />
+              <mat-hint *ngIf="modifyItem_changeQuantity.touched && modifyItem_mode.value === '0' && modifyItem_changeQuantity > modifyItem_initQuantity">
+                <span class="text-red">Attempting to deduct more than available.</span>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="footer text-right">
+        <span class="mr-2">
+           <button (click)="toggleModal('#modifyItemsQuantity')" mat-raised-button>cancel</button>
+        </span>
+        <span>
+          <button (click)="modifyItemQuantity()" mat-ripple mat-raised-button class="bg-theme-primary text-theme-bg">Save</button>
+        </span>
+      </div>
+    </div>
+  </section>
+</section>

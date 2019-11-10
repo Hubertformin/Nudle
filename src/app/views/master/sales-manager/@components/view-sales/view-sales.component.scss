@@ -1,0 +1,22 @@
+.header {
+  height: 10%;
+}
+.details {
+  height: 30%;
+}
+.list {
+  height: 60%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+th {
+  font-weight: bold;
+}
+th, td {
+  text-align: left;
+  padding: 16px;
+}

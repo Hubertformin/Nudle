@@ -1,0 +1,305 @@
+// @import "../../theme/theme";
+$status-bar-height: 22px;
+$side-nav-max-width: 200px;
+$side-nav-min-width: 50px;
+#app {
+  position: fixed;
+  top: 0;
+  bottom: $status-bar-height;
+  left: 0;
+  right: 0;
+  .master {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: $side-nav-max-width;
+    background: #ffffff;
+    //z-index: 6;
+    // box-shadow: 0 0 20px 6px rgba(0, 0, 0, 0.12);
+    &.minimized {
+      width: $side-nav-min-width;
+    }
+    transition: all 0.6s ease;
+  }
+  .view {
+    position: absolute;
+    top: 0;
+    right:0;
+    left: $side-nav-max-width;
+    bottom: 0;
+    z-index: 2;
+    transition: all 0.6s ease;
+    &.minimized {
+      left: $side-nav-min-width;
+    }
+    #app_header {
+      width: 100%;
+      // border-bottom: 1px solid #ddd;
+      height: 40.69px;
+      line-height: 40.69px;
+      z-index: 1000;
+      nav {
+        height: 100%;
+        .row , div[class^="col"] {
+          height: 100%;
+        }
+        input[type="search"] {
+          width: 100%;
+          margin: 0 10px;
+          border-radius: 26px;
+          padding: 5px 10px;
+          border: 1px solid;
+        }
+        ul {
+          list-style-type: none;
+          li {
+            display: inline-block;
+            line-height: 40.69px;
+            height: 40.69px;
+
+          }
+        }
+        img {
+          height: 30px;
+          width: 30px;
+          display: inline-block;
+        }
+        button.user {
+          height: 100%;
+          position: relative;
+          padding-left: 35px;
+          margin-left: 5px;
+          img {
+            position: absolute;
+            top: 11%;
+            left:0;
+          }
+        }
+      }
+      .notifier{
+        position: relative;
+        display: inline-block;
+        margin: 0 15px;
+        .nav-icons{
+          font-size: 1.4rem;
+        }
+        .badge {
+          position: absolute;
+          top:0;
+          right: -19%;
+          font-size: 9px;
+          display: block;
+          background-color: #0f6af3;
+          height: 16px;
+          width: 16px;
+          line-height: 16px;
+          text-align: center;
+          border-radius: 50%;
+          color: #ffffff;
+
+        }
+      }
+      .company-name {
+        font-size: 1.2rem;
+        // color: $primary-color;
+        font-weight: 100;
+        display: inline-block;
+      }
+    }
+    #app_view {
+      height: calc(100% - 40.69px);
+      width: 100%;
+      position: relative;
+    }
+  }
+}
+
+#sideNav.expanded {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 6%;
+    background-color: inherit;
+    border-bottom: 0.5px solid;
+    img {
+      width: auto;
+      height: 95%;
+    }
+  }
+  .body {
+    position: absolute;
+    top: 6%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    ul.links {
+      list-style-type: none;
+      li {
+        &.line {
+          &:first-child{
+            border-top: none !important;
+            margin: 0;
+          }
+          border-top: 0.5px solid;
+          color: inherit;
+          text-transform: capitalize;
+          font-size: 0.9rem;
+          padding: 3px 16px;
+          margin: 0.3rem 0 0.6rem;
+        }
+
+        padding-left: 15px;
+
+        a {
+          //margin: 10px;
+          display: block;
+          text-decoration: none;
+          font-size: 0.875rem;
+          font-weight: 500;
+          height: 40px;
+          line-height: 40px;
+          padding: 0 32px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          width: 100%;
+          color: inherit;
+          border-top-left-radius: 26px;
+          margin-bottom: 0.3rem;
+          border-bottom-left-radius: 26px;
+          &:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.12);
+          }
+          &.actives {
+            // background-color: lighten($primary-color, 20%);
+            // background-color: $primary-color-light
+          }
+        }
+      }
+    }
+  }
+}
+#sideNav.minimized {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 6%;
+    background-color: inherit;
+    // border-bottom: 0.5px solid $theme-border-color;
+    img {
+      width: auto;
+      height: 95%;
+    }
+  }
+  .body {
+    position: absolute;
+    top: 6%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    ul.links {
+      list-style-type: none;
+      li {
+        &.line {
+          &:first-child{
+            border-top: none;
+          }
+          // border-top: 0.5px solid $theme-border-color;
+          color: inherit;
+          text-transform: capitalize;
+          padding: 0 0 0 5px;
+          margin: 0;
+          font-size: 0.7rem;
+        }
+
+        a {
+          //margin: 10px;
+          display: block;
+          text-decoration: none;
+          font-size: 0.875rem;
+          font-weight: 500;
+          height: 40px;
+          line-height: 40px;
+          padding: 0 15px;
+          color: inherit;
+          margin-bottom: 0.3rem;
+          transition: display 0.6s ease;
+          width: 100%;
+          white-space: nowrap;
+          text-overflow: clip;
+          &:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.12);
+          }
+          &.actives {
+            // background-color: lighten($primary-color, 20%);
+            // background-color: $primary-color-light;
+          }
+        }
+      }
+    }
+  }
+}
+
+#app-status-bar {
+  position: fixed;
+  height: $status-bar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid;
+  font-size: 0.89rem;
+  #app-left-status {
+    text-align: left;
+  }
+  #app-center-status {
+    text-align: center;
+  }
+  #app-right-status {
+    text-align: right;
+  }
+}
+
+#backgroundUpdates {
+  display: none;
+}
+
+#updateModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    .title {
+      text-align: center;
+    }
+    .img {
+      width: 75px;
+      height: 75px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-actions {
+      text-align: right;
+    }
+  }
+}

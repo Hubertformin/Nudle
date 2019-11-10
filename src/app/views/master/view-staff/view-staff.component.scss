@@ -1,0 +1,51 @@
+// @import "../../../theme/theme";
+#header {
+  height: 12%;
+}
+#body {
+  height: 88%;
+}
+
+.tabs {
+  .tabs-list {
+    width: 100%;
+    margin: 0;
+    padding: 0 0.9rem;
+    list-style-type: none;
+    height: 50px;
+    li {
+      display: inline-block;
+      padding: 10px 15px;
+      position: relative;
+      cursor: pointer;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      height: 100%;
+      min-width: 150px;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      &.active {
+        //color: $primary-color;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          //border: 1.9px solid $primary-color;
+        }
+      }
+      &.actives {
+        border: 1px solid #DDDDDD;
+        border-bottom: 2px solid #ffffff;
+        margin-bottom: -1px;
+        // color: $primary-color;
+      }
+    }
+  }
+}
+
+.list {
+
+}

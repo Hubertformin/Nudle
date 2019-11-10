@@ -1,0 +1,36 @@
+.intro {
+  height: auto;
+  width: 100%;
+  // background: url("../../../../assets/images/banner-bg.png") no-repeat center;
+}
+.mat-card {
+  padding: 0!important;
+}
+.mat-card-header {
+  padding: 10px!important;
+  text-align: center;
+}
+.mat-card-content {
+  margin: 0!important;
+}
+.mat-card-actions {
+  padding: 10px !important;
+  margin: 0 !important;
+}
+
+.card-body {
+  // background: url("../../../../assets/images/cookbook-bg.jpg") no-repeat center;
+  background-size: cover;
+  position: relative;
+  height: 150px;
+  .contents {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000000;
+    padding: 30px;
+  }
+}

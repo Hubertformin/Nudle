@@ -1,0 +1,173 @@
+<section id="users-activity" class="h-full">
+  <div class="header">
+    <div class="row py-4">
+      <div class="col-sm-6">
+        <h3 class="text-theme-primary">Users Activity</h3>
+      </div>
+      <div class="col-sm-6 text-right">
+      </div>
+    </div>
+  </div>
+  <div class="body">
+<!--    show each employees activity-->
+    <mat-tab-group class="h-full">
+      <mat-tab label="Activity">
+        <section class="h-full">
+          <div class="row h-full">
+            <div style="padding:0;" class="col-sm-3 border-r h-full border-theme-default overflow-auto">
+              <ul class="chip-list">
+                <li class="header overflow-hidden border-b flex align-items-center border-theme-default">
+                  <p class="py-2 pl-2"><fa-icon [icon]="searchIcon"></fa-icon></p>
+                  <input type="search" class="pl-8" (keyup)="searchList($event)" placeholder="Search.." autofocus />
+                </li>
+                <li *ngFor="let user of staff;let i = index;" mat-ripple (click)="selectStaff(user.id)"
+                    [ngClass]="{'active' : selectedStaff ? selectedStaff.id === user.id : false}" class="list-item border-b border-theme-default">
+                  <img [src]="user.imageUrl | image" alt="logo" class="rounded-full">
+                  <div class="text">
+                    <h4 class="user-name">{{user.firstName}}</h4>
+                    <small class="user-group">{{user.group ? user.group.name : '(no role)'}}</small>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-9 h-full">
+              <!-- placeholder-->
+              <section *ngIf="!selectedStaff" class="details row h-full">
+                <div class="center-container text-center">
+                  <img class="my-2" src="assets/images/user-activity-placeholder.png" alt="user-activity">
+                  <h4 class="w-full">Click a user on the left pane to view details.</h4>
+                </div>
+              </section>
+              <!--          detailed pane of user-->
+              <section *ngIf="selectedStaff" class="details row h-full">
+                <div class="_detail-info borer-r border-theme-default col-sm-3 h-full pt-6 px-0">
+                  <div class="_user_meta">
+                    <div class="_image mb-2">
+                      <img [src]="selectedStaff.imageUrl | image" alt="user-imageUrl" class="rounded-full">
+                    </div>
+                    <div class="_text pl-2">
+                      <h3>{{selectedStaff.firstName+' '+selectedStaff.lastName}}</h3>
+                      <p>{{selectedStaff.group? selectedStaff.group.name : '(no role)'}}</p>
+                      <mat-divider></mat-divider>
+                      <p class="mt-2"><small>{{selectedStaff.userName ? '@' + selectedStaff.userName: ''}}</small></p>
+                      <small>Joined {{selectedStaff.createdAt | timeAgo}}</small>
+                    </div>
+                    <div class="_action pt-6">
+                      <button [routerLink]="'/master/staff/edit/' + selectedStaff.id" mat-stroked-button>Edit user</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="_detail-action col-sm-9 px-0 pt-4 h-full">
+                  <h4 class="text-theme-primary pb-2 px-4">Sales</h4>
+                  <div class="pane_1">
+                    <div class="row">
+                      <div class="col-sm-6 text-right">
+                        <div class="card px-4 pt-5 pb-3 shadow rounded relative mb-2 bg-teal-dark text-white">
+                          <h4><small>Assigned orders.</small></h4>
+                          <h3>{{selectedStaff.receivedSales.length}}</h3>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 text-right">
+                        <div class="card px-4 pt-5 pb-3 shadow rounded mb-2 bg-purple text-white">
+                          <h4><small>Total amount</small></h4>
+                          <h3>{{getTotalAmount(selectedStaff.receivedSales) | currency :config.get('company_currency')+' ': 'symbol': '1.0'}}</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6 text-right">
+                        <!--                      <div class="card px-4 pt-5 pb-3 shadow rounded mb-2 bg-orange text-white">-->
+                        <!--                        <h4><small>uncompleted sales</small></h4>-->
+                        <!--                        <h3>2</h3>-->
+                        <!--                      </div>-->
+                        <!--                      <div class="card px-4 pt-5 pb-3 shadow rounded mt-2 bg-green text-white">-->
+                        <!--                        <h4><small>Completed sales</small></h4>-->
+                        <!--                        <h3>40</h3>-->
+                        <!--                      </div>-->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pane_2 border-t border-theme-default relative pl-4 py-2">
+                    <div class="_item mb-2" *ngIf="selectedStaff.workShift">
+                      <small class="_item-title">Work-shifts</small>
+                      <h4 class="mt-2">
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('1')}">M</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('2')}">T</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('3')}">W</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('4')}">T</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('5')}">F</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('6')}">S</span>
+                        <span class="mr-2" [ngClass]="{'text-theme-primary': isWorkShiftDay('0')}">S</span>
+                      </h4>
+                    </div>
+                    <div class="_item mb-2" *ngIf="!selectedStaff.workShift">
+                      <p>No work-shifts for this user</p>
+                    </div>
+                    <div class="_action border-b pb-2 border-theme-default"><small>Recent activity</small></div>
+                    <div class="_table">
+                      <div class="w-full h-full py-3 overflow-auto">
+                        <div *ngFor="let sale of selectedStaff.receivedSales.slice(0, 20).reverse()" class="h-card shadow border flex align-items-center border-theme-default mb-3 rounded h-16 row">
+                          <div class="col-sm-4 text-wrap"><strong>{{sale.invoiceNumber}}</strong></div>
+                          <div class="col-sm-1">
+                            <span *ngIf="!config.getAllConfig().autocomplete_sales && sale.completed" class="text-green"><fa-icon [icon]="checkIcon"></fa-icon></span>
+                            <span *ngIf="!config.getAllConfig().autocomplete_sales && !sale.completed" class="text-red"><fa-icon [icon]="crossIcon"></fa-icon></span>
+                          </div>
+                          <div [title]="sale.totalAmount | localCurrency: config.get('company_currency')+' '" class="col-sm-3 text-wrap font-bold">
+                            {{sale.totalAmount | localCurrency: config.get('company_currency')+' '}}
+                          </div>
+                          <div class="col-sm-2">
+                            <span [title]="sale.cashier ? sale.cashier.firstName : 'n/a'" class="bg-orange-lightest text-wrap text-xs text-orange-dark rounded-full px-2 py-1">{{sale.cashier ? sale.cashier.firstName : 'n/a'}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </mat-tab>
+      <mat-tab label="Work shifts" class="h-full">
+        <div class="row h-full">
+          <div class="view-nav col-sm-3 py-2 h-full border-r border-theme-default">
+            <ul class="list">
+              <li [ngClass]="{'active' : selectedDayIndex === '1'}" (click)="getWorkShifts('1')">Monday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '2'}" (click)="getWorkShifts('2')">Tuesday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '3'}" (click)="getWorkShifts('3')">Wednesday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '4'}" (click)="getWorkShifts('4')">Thursday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '5'}" (click)="getWorkShifts('5')">Friday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '6'}" (click)="getWorkShifts('6')">Saturday</li>
+              <li [ngClass]="{'active' : selectedDayIndex === '0'}" (click)="getWorkShifts('0')">Sunday</li>
+            </ul>
+          </div>
+          <div class="col-sm-9 h-full py-6 px-0">
+            <!-- placeholder-->
+            <section *ngIf="selectedWorkshiftStaff.length < 1" class="details row h-full w-full">
+              <div class="center-container text-center">
+                <img class="my-2" src="assets/images/user-activity-placeholder.png" alt="user-activity">
+                <h4 class="w-full">No work-shifts for this day</h4>
+              </div>
+            </section>
+<!--            view-->
+            <div class="row">
+              <div class="col-sm-6 py-2" *ngFor="let user of selectedWorkshiftStaff">
+                <mat-card>
+                  <div class="row">
+                    <div class="col-sm-4 px-0">
+                      <img [src]="user.imageUrl | image" alt="pp" style="height: 50px;width: 50px;" class="rounded-full" />
+                    </div>
+                    <div class="col-sm-8">
+                      <h4>{{user.firstName + user.lastName ? ' ' + user.lastName : ''}}</h4>
+                      <p><small>{{user.group.name}}</small></p>
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</section>

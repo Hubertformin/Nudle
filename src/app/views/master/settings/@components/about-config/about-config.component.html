@@ -1,0 +1,26 @@
+<section class="settings-view h-full">
+  <!--body -->
+  <div id="header">
+    <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4"><fa-icon [icon]="aboutIcon"></fa-icon> About</h2>
+    <div class="py-3 px-4 border-b border-theme-default">
+      <img src="assets/images/logo-0.75x.png" style="height: 35px" class="inline-block" alt="">
+      <h1 class="inline-block text-green-dark text-5xl">2019</h1>
+    </div>
+  </div>
+  <div id="body" class="relative pl-8">
+    <!--      <h2 class="my-2"><small>nudle</small>&nbsp;<span class="text-theme-primary">2019</span></h2>-->
+    <h4 class="text-grey-darker mb-2">Version {{AppConfig.version}}</h4>
+    <div>
+      <p><strong>Licence ISC</strong></p>
+      Licence might be subjected to policy changes.
+      Software installed in test mode.
+    </div>
+    <div class="text-center absolute text-center" style="bottom: 0;right: 0;left: 0;">
+      <p class="">&copy; 2019 {{AppConfig.author.name}}. All right reserved.</p>
+      <p class="">
+        <a href="#">Terms of use</a>
+        <a href="#" class="ml-2">Privacy policy</a>
+      </p>
+    </div>
+  </div>
+</section>

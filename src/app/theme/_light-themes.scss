@@ -1,0 +1,252 @@
+/**
+= =================== LIGHT THEMES =========================
+**/
+
+// RED
+$nudle-pink-primary: mat-palette($mat-pink, 700, 500, 900);
+$nudle-pink-accent: mat-palette($mat-orange, 600, 200, 800);
+$nudle-pink-theme: mat-light-theme($nudle-pink-primary, $nudle-pink-accent);
+// class
+body.light-pink-theme {
+  @include angular-material-theme($nudle-pink-theme);
+  @include sat-datepicker-theme($nudle-pink-theme);
+
+  $primary-color: mat-color($nudle-pink-primary);
+  $primary-color-light: mat-color($nudle-pink-primary, 0.4);
+  $accent-color: mat-color($nudle-pink-accent);
+  $theme-bg: #fff;
+  $theme-fg: rgba(0,0,0,0.67);
+  $theme-border-color: #ddd;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary, .text-theme-primary-light {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom apps
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+  // list and actives
+  ul.list {
+    li.active {
+      background-color: transparentize($primary-color, 0.8);
+      color: $primary-color;
+      border-left: 3px solid $primary-color;
+    }
+    &.view-nav {
+      li.active {
+        color: $primary-color;
+      }
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+}
+
+
+// TEAL
+$nudle-teal-primary: mat-palette($mat-teal, 500, 100, 700);
+$nudle-teal-accent: mat-palette($mat-purple, 600, 200, 800);
+$nudle-teal-theme: mat-light-theme($nudle-teal-primary, $nudle-teal-accent);
+// class
+body.light-teal-theme {
+  @include angular-material-theme($nudle-teal-theme);
+  @include sat-datepicker-theme($nudle-teal-theme);
+
+  $primary-color: mat-color($nudle-teal-primary);
+  $primary-color-light: mat-color($nudle-teal-primary, 0.4);
+  $accent-color: mat-color($nudle-teal-accent);
+  $theme-bg: #fff;
+  $theme-fg: rgba(0,0,0,0.67);
+  $theme-border-color: #ddd;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary, .text-theme-primary-light {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom apps
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+  // list and actives
+  ul.list {
+    li.active {
+      background-color: transparentize($primary-color, 0.8);
+      color: $primary-color;
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+}
+
+
+
+// BLUE
+$nudle-blue-primary: mat-palette($mat-light-blue, 700, 500, 900);
+$nudle-blue-accent: mat-palette($mat-green, 600, 200, 800);
+$nudle-blue-theme: mat-light-theme($nudle-blue-primary, $nudle-blue-accent);
+// class
+body.light-blue-theme {
+  @include angular-material-theme($nudle-blue-theme);
+  @include sat-datepicker-theme($nudle-blue-theme);
+
+  $primary-color: mat-color($nudle-blue-primary);
+  $primary-color-light: mat-color($nudle-blue-primary, 0.4);
+  $accent-color: mat-color($nudle-blue-accent);
+  $theme-bg: #fff;
+  $theme-fg: rgba(0,0,0,0.67);
+  $theme-border-color: #ddd;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary, .text-theme-primary-light {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom apps
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+  // list and actives
+  ul.list {
+    li.active {
+      background-color: transparentize($primary-color, 0.8);
+      color: $primary-color;
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+}
+
+// orange
+$nudle-orange-primary: mat-palette($mat-deep-orange, 700, 500, 900);
+$nudle-orange-accent: mat-palette($mat-pink, 600, 200, 800);
+$nudle-orange-theme: mat-light-theme($nudle-orange-primary, $nudle-blue-accent);
+// class
+body.light-orange-theme {
+  @include angular-material-theme($nudle-orange-theme);
+  @include sat-datepicker-theme($nudle-orange-theme);
+
+  $primary-color: mat-color($nudle-orange-primary);
+  $primary-color-light: mat-color($nudle-orange-primary, 0.4);
+  $accent-color: mat-color($nudle-orange-accent);
+  $theme-bg: #fff;
+  $theme-fg: rgba(0,0,0,0.67);
+  $theme-border-color: #ddd;
+
+  .bg-theme-primary {
+    background-color: $primary-color !important;
+  }
+  .bg-theme-accent {
+    background-color: $accent-color !important;
+  }
+  .text-theme-primary, .text-theme-primary-light {
+    color: $primary-color !important;
+  }
+  .text-theme-accent {
+    color: $accent-color !important;
+  }
+  .bg-theme-bg {
+    background-color: $theme-bg !important;
+  }
+  .text-theme-fg {
+    color: $theme-fg !important;
+  }
+  .border-theme-primary {
+    border-color: $primary-color !important;
+  }
+  // custom apps
+  #sideNav a.active {
+    background-color: transparentize($primary-color, 0.6);
+  }
+  // list and actives
+  ul.list {
+    li.active {
+      background-color: transparentize($primary-color, 0.8);
+      color: $primary-color;
+      border-left: 3px solid $primary-color;
+    }
+  }
+  .tabs-list li.active {
+    color: $primary-color;
+    &::after {
+      border: 1.9px solid $primary-color;
+    }
+  }
+  .active-light {
+    background-color: transparentize($primary-color, $light-background-deg);
+  }
+}
+

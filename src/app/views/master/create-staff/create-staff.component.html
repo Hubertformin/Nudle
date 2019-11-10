@@ -1,0 +1,385 @@
+<section id="createUser" class="h-full">
+  <section id="header" class="border-b px-3 py-1">
+    <div class="row">
+      <div class="col-sm-4">
+        <button (click)="back()" mat-button><fa-icon [icon]="backIcon"></fa-icon> Back</button>
+      </div>
+      <div class="col-sm-4 text-center pt-2">
+        <h4 class="text-theme-primary">Add new staff</h4>
+      </div>
+      <div class="col-sm-4 text-right">
+        <button mat-raised-button class="bg-theme-primary text-theme-bg" (click)="saveEmployee($event)">Save</button>
+      </div>
+    </div>
+  </section>
+  <section id="body">
+    <!-- form -->
+    <form class="h-full overflow-y-auto pb-8" [formGroup]="createForm">
+      <div class="row h-full">
+        <!-- Basic info -->
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <h4 class="text-theme-primary py-2">Basic information</h4>
+              <mat-divider></mat-divider>
+            </div>
+            <div class="col-sm-9 pt-2">
+              <div class="row pb-2">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>First name</mat-label>
+                    <input matInput placeholder="First name" formControlName="firstName" />
+                    <mat-hint *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"><span class="text-red">A valid name is required</span></mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Last name</mat-label>
+                    <input matInput placeholder="Last name" formControlName="lastName" />
+                    <mat-hint *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"><span class="text-red">A valid name is required</span></mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Phone number (optional)</mat-label>
+                    <input matInput placeholder="Phone number (optional)" formControlName="phoneNumber" />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Age (optional)</mat-label>
+                    <input matInput placeholder="Age (optional)" type="number" formControlName="age" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Email (optional)</mat-label>
+                    <input matInput placeholder="Email (optional)" formControlName="email" />
+                    <mat-hint *ngIf="email.invalid && (email.dirty || email.touched)"><span class="text-red">Invalid email</span></mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select gender</mat-label>
+                    <mat-select formControlName="gender">
+                      <mat-option value="male">Male</mat-option>
+                      <mat-option value="female">Female</mat-option>
+                      <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                    <mat-hint *ngIf="gender.invalid && (gender.dirty || gender.touched)"><span class="text-red">Please select user's gender</span></mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+<!--                <div class="col-sm-6">-->
+<!--                  <mat-form-field appearance="outline">-->
+<!--                    <mat-label>Select branch</mat-label>-->
+<!--                    <mat-select (selectionChange)="onBranchSelect($event)" [formControl]="branchControlIndex">-->
+<!--                      <mat-option *ngFor="let branch of branches; let i = index;" [value]="i">-->
+<!--                        {{branch.name | titlecase}}-->
+<!--                      </mat-option>-->
+<!--                      <mat-option *ngIf="branches.length === 0" value="" disabled="true">No branches found.</mat-option>-->
+<!--                    </mat-select>-->
+<!--                    <mat-hint *ngIf="branch.invalid && (branch.dirty || branch.touched)"><span class="text-red">Please assign user to a branch</span></mat-hint>-->
+<!--                  </mat-form-field>-->
+<!--                </div>-->
+              </div>
+            </div>
+            <!--user image -->
+            <div class="col-sm-3 py-2">
+              <div id="userImageContainer" class="userImg border w-full text-center rounded-full" title="click or drop image to import image">
+                <input (change)="userImageChanged($event)" type="file" id="userImageInput" tabindex="-1" style="display: none;" accept="image/*">
+                <img id="userImagePlaceholder" alt="userImg" onclick="document.querySelector('#userImageInput').click()" src="assets/images/uploadUserImg.png" class="h-full w-full rounded-full">
+              </div>
+              <p class="text-center"><small>(Click on image to add)</small></p>
+            </div>
+            <!--user account details-->
+            <div class="col-sm-12 py-3">
+              <div class="row">
+                <div class="col-sm-12 mb-2">
+                  <h4 class="text-theme-primary py-2">User account details (optional)</h4>
+                  <mat-divider></mat-divider>
+                </div>
+                <div class="col-sm-4">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Select user role</mat-label>
+                        <mat-select (selectionChange)="onUserGroupChange($event)" formControlName="selectedGroup">
+                          <mat-option *ngFor="let role of staffGroups;let i = index;" [value]="i">
+                            {{role.name | titlecase}}
+                          </mat-option>
+                          <mat-option *ngIf="staffGroups.length === 0" value="" disabled="true">No user roles found</mat-option>
+                          <mat-option value="createUserRole" class="border-t border-theme-default">+ create new role</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-12 p-4">
+                      <button mat-raised-button class="bg-theme-accent text-theme-bg" (click)="toggleTopModal('#setPermissionModal')"><fa-icon [icon]="createIcon"></fa-icon> Edit permission</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5 border-r border-theme-default">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Login name</mat-label>
+                        <input matInput placeholder="Login name" formControlName="userName" />
+                        <mat-hint>Suggestion: {{firstName.value ? firstName.value.toString().toLowerCase() : 'name'}}@{{company_name.toString().replace(' ', '_').toLowerCase()}}</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput type="password" placeholder="Password" formControlName="password" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Confirm password</mat-label>
+                        <input id="confirmPasswordInput" matInput type="password" placeholder="Confirm password" formControlName="confirmPassword" (change)="checkPasswordsMatch($event)" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <ul class="pl-8 pt-4">
+                    <li>These attributes are required for users accessing this application</li>
+                    <li>A role/permission should be set</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- more details -->
+            <div class="col-sm-12 px-0 pt-3 border-t" style="padding-right: 0;padding-left: 0;">
+              <section class="expansion-panel mb-5">
+                <section class="panel-header cursor-pointer" (click)="slideToggle('#more_details_panel')">
+                  <h4>
+                    + Add more details
+                    <span class="float-right"><fa-icon [icon]="cheveronDown"></fa-icon></span>
+                  </h4>
+                </section>
+                <!-- panel body-->
+                <div id="more_details_panel" class="panel-body">
+                  <section class="panel-section">
+                    <section class="header p-3">
+                      <h3 class="text-theme-primary">Payroll</h3>
+                      <mat-divider></mat-divider>
+                    </section>
+                    <section class="body row p-3">
+
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Work shift</mat-label>
+                          <mat-select formControlName="workShift" multiple>
+                            <mat-option value="1">Monday</mat-option>
+                            <mat-option value="2">Tuesday</mat-option>
+                            <mat-option value="3">Wednesday</mat-option>
+                            <mat-option value="4">Thursday</mat-option>
+                            <mat-option value="5">Friday</mat-option>
+                            <mat-option value="6">Saturday</mat-option>
+                            <mat-option value="0">Sunday</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Salary</mat-label>
+                          <input matInput placeholder="Salary" type="number" formControlName="salary" />
+                          <span matPrefix class="mr-3 bg-theme-primary text-white p-1 text-xs">{{currency}}</span>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>contract type</mat-label>
+                          <mat-select formControlName="contractType">
+                            <mat-option value="Full-Time">Full-Time</mat-option>
+                            <mat-option value="Part-Time">Part-Time</mat-option>
+                            <mat-option value="Fixed-Term">Fixed-Term</mat-option>
+                            <mat-option value="Casual work">Casual work</mat-option>
+                            <mat-option value="Other">Other</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                    </section>
+                  </section>
+                  <!-- documents -->
+<!--                  <section class="panel-section">-->
+<!--                    <section class="header p-3 mb-2">-->
+<!--                      <h3 class="text-theme-primary">Documents</h3>-->
+<!--                      <mat-divider></mat-divider>-->
+<!--                    </section>-->
+<!--                    <section class="body">-->
+
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-4">-->
+<!--                          <button mat-raised-button>Generate joining letter</button>-->
+<!--                        </div>-->
+<!--                        <div class="col-sm-4">-->
+<!--                          <mat-checkbox>Email letter</mat-checkbox>-->
+<!--                        </div>-->
+<!--                        <div class="col-sm-4">-->
+<!--                          <mat-form-field floatLabel="always" appearance-config="outline">-->
+<!--                            <mat-label>CV / Resume</mat-label>-->
+<!--                            <input matInput placeholder="Import CV / Resume" formControlName="resumeUrl" />-->
+<!--                            <button matSuffix mat-button class="bg-orange" (click)="importCVFile()"><fa-icon [icon]="fileImport"></fa-icon></button>-->
+<!--                          </mat-form-field>-->
+<!--                        </div>-->
+<!--                        <div class="col-sm-4">-->
+<!--                          <mat-form-field floatLabel="always" appearance-config="outline">-->
+<!--                            <mat-label>Joining letter</mat-label>-->
+<!--                            <input matInput placeholder="Import Joining letter" formControlName="joining_letter_url" />-->
+<!--                            <button matSuffix mat-button class="bg-orange" (click)="importJoiningLetter()"><fa-icon [icon]="fileImport"></fa-icon></button>-->
+<!--                          </mat-form-field>-->
+<!--                        </div>-->
+
+<!--                        <div class="col-sm-4">-->
+<!--                          <mat-form-field floatLabel="always" appearance-config="outline">-->
+<!--                            <mat-label>Other document</mat-label>-->
+<!--                            <input matInput placeholder="Import other document" formControlName="other_document_url" />-->
+<!--                            <button matSuffix mat-button class="bg-orange" (click)="importOtherDocument()"><fa-icon [icon]="fileImport"></fa-icon></button>-->
+<!--                          </mat-form-field>-->
+<!--                        </div>-->
+<!--                      </div>-->
+
+<!--                    </section>-->
+<!--                  </section>-->
+                </div>
+
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- create staff role modal-->
+      <section id="createStaffGroup" class="top-modal">
+        <div class="content">
+          <div class="header">
+            <h3 class="col-sm-12 text-theme-primary mb-1 text-center">ADD USER ROLE</h3>
+          </div>
+          <div class="body">
+            <app-staff-group></app-staff-group>
+          </div>
+        </div>
+        <div class="footer text-right">
+          <span class="mr-2"><button mat-raised-button (click)="createStaffGroup()" class="bg-theme-primary text-theme-bg">save</button></span>
+          <span><button mat-raised-button (click)="toggleTopModal('#createStaffGroup')">cancel</button></span>
+        </div>
+      </section>
+      <!-- set permissions modal-->
+      <section id="setPermissionModal" class="top-modal">
+        <div class="content">
+          <div class="header">
+            <h3 class="col-sm-12 text-theme-primary mb-1 text-center">Set permissions</h3>
+          </div>
+          <div class="body">
+            <section id="permissions_form_group" formGroupName="permissions">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="row border-b py-2">
+                    <div class="col-sm-3">
+                      <strong>{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.LABELS.MENU_ITEMS' | translate }}</strong>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="mi_view" formControlName="MENU_ITEMS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="mi_create" formControlName="MENU_ITEMS_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="mi_update" formControlName="MENU_ITEMS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="mi_delete" formControlName="MENU_ITEMS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+                    </div>
+                  </div>
+
+                  <div class="row border-b py-2">
+                    <div class="col-sm-3">
+                      <strong>{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.LABELS.INVOICES' | translate }}</strong>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="in_view" formControlName="INVOICES_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="in_create" formControlName="INVOICES_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="in_update" formControlName="INVOICES_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="in_delete" formControlName="INVOICES_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+                    </div>
+                  </div>
+
+                  <div class="row border-b py-2">
+                    <div class="col-sm-3">
+                      <strong>{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.LABELS.REPORTS' | translate }}</strong>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="r_view" formControlName="REPORTS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2 text-center">--</div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="r_update" formControlName="REPORTS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="r_update" formControlName="REPORTS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+                    </div>
+                  </div>
+
+                  <div class="row border-b py-2">
+                    <div class="col-sm-3">
+                      <strong>{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.LABELS.USERS' | translate }}</strong>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="u_view" formControlName="USERS_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="u_create" formControlName="USERS_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="u_update" formControlName="USERS_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="u_delete" formControlName="USERS_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+                    </div>
+                  </div>
+
+                  <div class="row border-b py-2">
+                    <div class="col-sm-3">
+                      <strong>Inventory</strong>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="o_view" formControlName="INVENTORY_READ">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.VIEW' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="o_create" formControlName="INVENTORY_CREATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.CREATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="o_update" formControlName="INVENTORY_UPDATE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.UPDATE' | translate }}</mat-checkbox>
+                    </div>
+                    <div class="col-sm-2">
+                      <mat-checkbox name="o_delete" formControlName="INVENTORY_DELETE">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.PERMISSIONS.CHECK_OPTIONS.DELETE' | translate }}</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+          </div>
+        </div>
+        <div class="footer text-right">
+          <button mat-raised-button class="bg-theme-accent text-theme-bg" (click)="toggleTopModal('#setPermissionModal')">{{ 'VIEWS.USER_GROUPS.USER_GROUP_FORM.ACTION_BUTTONS.CANCEL' | translate }}</button>
+        </div>
+      </section>
+    </form>
+  </section>
+</section>

@@ -1,0 +1,113 @@
+<!--
+========== CHECK OUT DATA BINDING: https://angular.io/guide/
+
+-->
+
+<section id="header" class="bg-theme-primary text-white border-theme-default border-b">
+  <div class="row align-items-center h-full">
+    <div class="col-sm-9">
+      <h3 class="font-hairline">Organization's settings</h3>
+    </div>
+    <div class="col-sm-3 text-center">
+      <button (click)="save()" class="bg-theme-bg text-theme-primary" mat-raised-button>Save</button>
+    </div>
+  </div>
+</section>
+<section id="body" class="">
+  <div class="row h-full">
+    <div class="col-sm-9 overflow-auto h-full pb-10 pt-4" [formGroup]="editForm">
+      <div class="row">
+        <div class="col-sm-12 border-b border-theme-default py-2 mb-2 relative">
+          <h4 class="text-theme-primary-light font-hairline">Organization's Info</h4>
+        </div>
+        <div class="col-sm-7">
+          <mat-form-field appearance="outline">
+            <mat-label>Organization's name</mat-label>
+            <input (change)="save()" type="text" placeholder="Organization's name" formControlName="company_name" matInput>
+          </mat-form-field>
+        </div>
+<!--        <div class="col-sm-6">-->
+<!--          <p class="py-4"><span>https://nudle.enchirdentity.com/{{config.getAllConfig().company_name}}</span></p>-->
+<!--        </div>-->
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Street address</mat-label>
+            <input (change)="save()" type="text" placeholder="Street address" formControlName="company_address" matInput>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 border-b border-theme-default py-2 mb-2 relative">
+          <h4 class="text-theme-primary-light font-hairline">Regional settings</h4>
+        </div>
+        <div class="col-sm-4">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Country</mat-label>
+            <input type="text" placeholder="Country" matInput readonly [value]="country" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>State/Province</mat-label>
+            <input type="text" placeholder="State/Province" matInput readonly [value]="state" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>City</mat-label>
+            <input type="text" placeholder="City" matInput readonly [value]="city" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Currency</mat-label>
+            <input type="text" placeholder="Currency" matInput readonly [value]="currency" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 text-right">
+          <button class="bg-theme-primary text-theme-bg" mat-button [routerLink]="'/master/settings/language'">
+            <fa-icon [icon]="configIcon"></fa-icon> Configure</button>
+        </div>
+      </div>
+<!--      contact-->
+      <div class="row">
+        <div class="col-sm-12 border-b border-theme-default py-2 mb-2 relative">
+          <h4 class="text-theme-primary-light col-sm-12 font-hairline">Primary contact</h4>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <button class="pr-1 text-theme-fg" matPrefix>+{{country_phone}}</button>
+            <mat-label>Phone</mat-label>
+            <input (change)="save()" type="text" placeholder="Phone" matInput style="letter-spacing: 0.2rem;" formControlName="company_phone" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input (change)="save()" type="text" placeholder="Email" formControlName="company_email" matInput />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Website</mat-label>
+            <button matPrefix class="pr-1 text-theme-fg">http://</button>
+            <input (change)="save()" type="text" placeholder="Website" matInput formControlName="company_website" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3 border-l border-theme-default text-center py-4">
+      <p class="mb-2"><span>Add company logo</span></p>
+      <div class="h-32 mb-4 w-full">
+        <img id="logo_img" src="assets/images/company-avatar.png" class="w-auto h-full rounded" />
+      </div>
+      <input id="company-logo-img" #select_logo type="file" style="display: none;" accept="image/*" (change)="onImageSelect($event)">
+      <button (click)="select_logo.click()" mat-button style="border: 1px solid #ddd;">Add photo</button>
+      <span *ngIf="company_log_url !== ''" class="ml-1 mt-2 inline-block">
+        <button (click)="removeImage()" mat-flat-button class="bg-grey text-white">Delete photo</button>
+      </span>
+    </div>
+  </div>
+</section>

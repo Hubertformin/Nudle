@@ -1,0 +1,56 @@
+{
+  "productName": "nudle",
+  "appId": "com.enchird.nudle",
+  "copyright": "Copyright © 2019 Enchird Entity",
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+        "**/*",
+        "!**/*.ts",
+        "!bin/",
+        "!*.code-workspace",
+        "!LICENSE.md",
+        "!package.json",
+        "!package-lock.json",
+        "!src/",
+        "!e2e/",
+        "!hooks/",
+        "!angular.json",
+        "!_config.yml",
+        "!karma.conf.js",
+        "!tsconfig.json",
+        "!tslint.json"
+    ],
+  "win": {
+    "icon": "build/logo.ico",
+    "target": [
+      "nsis"
+    ],
+    "signingHashAlgorithms": ["sha1", "sha256"]
+  },
+  "mac": {
+    "icon": "build/icon.icns",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "dist",
+    "target": [
+      "AppImage"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "installerIcon": "build/installerIcon.ico",
+    "installerHeader" : "build/logo-banner.bmp",
+    "license" : "build/license.txt"
+  },
+  "publish": {
+    "provider": "github",
+    "token": "264d86e01f284b1d29c39803499147d91dd89899",
+    "private": true
+  }
+}

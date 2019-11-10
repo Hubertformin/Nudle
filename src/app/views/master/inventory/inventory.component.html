@@ -1,0 +1,339 @@
+<section id="inventory" class="h-full">
+<!--  Header -->
+  <section id="header">
+<!--    <div class="flex items-center bg-grey-lightest text-green-darker text-sm font-bold px-4 py-3" role="alert">-->
+<!--      <p class="w-1/2">Inventory</p>-->
+<!--      <p class="w-1/2"><small>Create, update, and delete inventory items, items used to produce or sold as menu items..</small></p>-->
+<!--    </div>-->
+    <div class="row pt-4 px-6">
+      <div class="col-sm-7">
+<!--        <h3 class="text-theme-primary"><fa-icon [icon]="menuItemIcon"></fa-icon> Menu Items</h3>-->
+        <h3 class="text-theme-primary">
+          <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+        Inventory and Stackable Items
+        </h3>
+        <small>Ingredient inventory and stackable menu items.</small>
+      </div>
+      <div *ngIf="authUser.permissions.INVENTORY_CREATE" class="col-sm-5 text-right">
+        <span><button (click)="toggleCreateMode()" mat-stroked-button class="text-theme-primary"><fa-icon [icon]="createIcon"></fa-icon> Add item</button></span>
+       </div>
+    </div>
+  </section>
+<!--
+===============================
+body
+===============================
+-->
+  <section id="body">
+    <div class="view-body">
+      <div class="action border-b">
+        <div class="row">
+          <div class="col-sm-8"></div>
+          <div class="col-sm-4 pt-5">
+            <div class="search-box">
+              <input (keyup)="searchInventory()" id="searchInput" type="text" class="py-2 px-3 border border-r-0 rounded-tl rounded-bl w-3/4" placeholder="Search.." />
+              <button (click)="searchInventory()" class="search-btn px-4 border border-theme-default rounded-tr rounded-br" mat-ripple><fa-icon [icon]="searchIcon"></fa-icon></button>
+            </div>
+          </div>
+        </div>
+        <div class="list-title row">
+          <div class="col-sm-12 px-4">
+            <div class="row">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-2"><small class="cursor-pointer">Name</small></div>
+              <div class="col-sm-2"><small class="cursor-pointer">Units</small></div>
+              <div class="col-sm-2"><small class="cursor-pointer">Unit cost</small></div>
+              <div class="col-sm-2"><small class="cursor-pointer">Quantity</small></div>
+              <div class="col-sm-2"><small class="cursor-pointer">Modified</small></div>
+              <div class="col-sm-1"><small class="cursor-pointer">Action</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="list px-4 pt-4 pb-6 relative">
+<!--        search box-->
+        <div id="searchInvRes" class="searchResults bg-theme-bg px-2 pt-4 overflow-auto">
+          <!--              place holder-->
+          <div *ngIf="inventorySearchResults.length === 0" class="h-full flex justify-center align-items-center">
+            <h3 class="">No results.</h3>
+          </div>
+<!--          show items -->
+          <div *ngFor="let item of inventorySearchResults; let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+            <section class="row align-items-center h-full w-full">
+              <div class="col-sm-1">
+              <span class="h-4 w-4 random-bg img-icon relative" [ngClass]="{'bg-teal-dark': !item.stackable, 'bg-pink-dark': item.stackable}">
+<!--                {{item.name[0].toUpperCase()}}-->M
+                <span title="The quantity is below order level"
+                      *ngIf="((!item.stackable && item.minOrderQuantity) ? item.quantity <= item.minOrderQuantity : item.quantity <= 5)
+                      || item.stackable && item.quantity < 15"
+                      style="min-height: 2rem;min-width: 2rem;bottom:-15%;transform: scale(0.7);right:-19%;"
+                      class="bg-red text-theme-bg absolute flex justify-center align-items-center rounded-full">
+                      <fa-icon [icon]="warnIcon"></fa-icon>
+                      </span>
+              </span>
+              </div>
+              <div class="col-sm-2">
+                <p class="display-text" title="{{item.name}}">{{item.name}}</p>
+              </div>
+              <div class="col-sm-2">
+                <span title="{{item.stackable ? '(EA)' :item.units}}">{{item.stackable ? '(n/a)' :item.units}}</span></div>
+              <div class="col-sm-2">
+                <p class="display-text" title="{{item.stackable ? item.unitPrice : item.unitCost}}">{{item.stackable ? item.unitPrice : item.unitCost}}</p>
+              </div>
+              <div class="col-sm-2">
+              <span class="display-text"
+                    [ngClass]="{'text-red-dark': ((!item.stackable && item.minOrderQuantity) ? item.quantity <= item.minOrderQuantity : item.quantity <= 5)
+                      || item.stackable && item.quantity < 15}"
+              >{{item.quantity}}</span>
+              </div>
+              <div class="col-sm-2">
+                <p class="display-text">{{item.updatedAt | date}}</p>
+              </div>
+              <div class="col-sm-1" *ngIf="!item.stackable">
+                <button mat-icon-button [matMenuTriggerFor]="menu" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="toggleUpdateMode(i)"><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+                  <button mat-menu-item (click)="toggleModifyQtyModal(i)"><fa-icon [icon]="addQty"></fa-icon>&nbsp;&nbsp;Modify quantity</button>
+                  <button mat-menu-item (click)="deleteInventoryItem(item.id, i)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+                </mat-menu>
+              </div>
+            </section>
+          </div>
+        </div>
+          <!-- place holder incase there is no inventory items-->
+          <section *ngIf="inventoryItems.length < 1" class="fill-element bg-theme-bg flex justify-center align-items-center">
+              <div class="text-center">
+                  <img src="assets/images/no-inventory.png" alt="no_items">
+                  <h4 class="pt-2 pb-4">No Inventory items.</h4>
+                  <button (click)="toggleCreateMode()" mat-raised-button class="bg-theme-accent text-theme-bg">
+                      <fa-icon [icon]="createIcon"></fa-icon> Add inventory item</button>
+              </div>
+          </section>
+        <div *ngFor="let item of inventoryItems; let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+          <section class="row align-items-center h-full w-full">
+            <div class="col-sm-1">
+              <span class="h-4 w-4 random-bg img-icon relative" [ngClass]="{'bg-teal-dark': !item.stackable, 'bg-pink-dark': item.stackable}">
+<!--                {{item.name[0].toUpperCase()}}-->M
+                <span title="The quantity is below order level"
+                      *ngIf="((!item.stackable && item.minOrderQuantity) ? item.quantity <= item.minOrderQuantity : item.quantity <= 5)
+                      || item.stackable && item.quantity < 15"
+                      style="min-height: 2rem;min-width: 2rem;bottom:-15%;transform: scale(0.7);right:-19%;"
+                      class="bg-red text-theme-bg absolute flex justify-center align-items-center rounded-full">
+                      <fa-icon [icon]="warnIcon"></fa-icon>
+                      </span>
+              </span>
+            </div>
+            <div class="col-sm-2">
+              <p class="display-text" title="{{item.name}}">{{item.name}}</p>
+            </div>
+            <div class="col-sm-2">
+              <span title="{{item.stackable ? '(EA)' :item.units}}">{{item.stackable ? '(n/a)' :item.units}}</span></div>
+            <div class="col-sm-2">
+              <p class="display-text" title="{{item.stackable ? item.unitPrice : item.unitCost}}">{{item.stackable ? item.unitPrice : item.unitCost}}</p>
+            </div>
+            <div class="col-sm-2">
+              <span class="display-text"
+                 [ngClass]="{'text-red-dark': ((!item.stackable && item.minOrderQuantity) ? item.quantity <= item.minOrderQuantity : item.quantity <= 5)
+                      || item.stackable && item.quantity < 15}"
+              >{{item.quantity}}</span>
+            </div>
+            <div class="col-sm-2">
+              <p class="display-text">{{item.updatedAt | date}}</p>
+            </div>
+            <div class="col-sm-1" *ngIf="!item.stackable">
+              <button mat-icon-button [matMenuTriggerFor]="menu" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item *ngIf="authUser.permissions.INVENTORY_UPDATE" (click)="toggleUpdateMode(i)"><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+                <button mat-menu-item *ngIf="authUser.permissions.INVENTORY_UPDATE" (click)="toggleModifyQtyModal(i)"><fa-icon [icon]="addQty"></fa-icon>&nbsp;&nbsp;Modify quantity</button>
+                <button mat-menu-item *ngIf="authUser.permissions.INVENTORY_DELETE" (click)="deleteInventoryItem(item.id, i)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+              </mat-menu>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- create inventory modal-->
+  <section id="createInventoryItem" class="top-modal">
+
+    <div class="content">
+      <div class="header">
+        <h4 class="text-theme-primary">Create Inventory item</h4>
+      </div>
+
+      <div class="body" style="padding: 0;">
+        <form action="#" class="w-full h-full" [formGroup]="itemForm">
+          <div class="row h-full">
+            <div class="col-sm-9 border-r h-full py-10 overflow-y-auto">
+                <div class="row">
+                    <div class="col-sm-6 pl-0">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Name</mat-label>
+                            <input type="text" matInput placeholder="Name" formControlName="name" />
+                            <mat-hint *ngIf="name.invalid && (name.touched || name.dirty)"><span class="text-red">Please insert a valid name</span></mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6 pr-0">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Units of measurement</mat-label>
+                            <mat-select formControlName="units">
+                                <mat-option value="Kg">Kg</mat-option>
+                                <mat-option value="EA">EA</mat-option>
+                                <mat-option value="Oz">Oz</mat-option>
+                                <mat-option value="ml">ml</mat-option>
+                                <mat-option value="gal">gal</mat-option>
+                                <mat-option value="L">L</mat-option>
+                                <mat-option value="ib">ib</mat-option>
+                                <mat-option value="gr">gr</mat-option>
+                                <mat-option value="gt">gt</mat-option>
+                                <mat-option value="fl-oz">fl-oz</mat-option>
+                            </mat-select>
+                            <mat-hint *ngIf="units.invalid && (units.touched || units.dirty)"><span class="text-red">Please select a unit.</span></mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Quantity {{units.value ? '('+ units.value +')' : ''}}</mat-label>
+                    <input type="number" matInput placeholder="Quantity" formControlName="quantity" />
+                    <mat-hint *ngIf="quantity.invalid && (quantity.touched || quantity.dirty)"><span class="text-red">Please insert quantity</span></mat-hint>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Cost {{units.value ?  'per ' + units.value : ''}} in (FCFA)</mat-label>
+                    <input type="number" matInput placeholder="Price per unit" formControlName="unitCost" />
+                    <mat-hint *ngIf="unitPrice.invalid && (unitPrice.touched || unitPrice.dirty)"><span class="text-red">Please insert a unit price</span></mat-hint>
+                  </mat-form-field>
+              <!--mat expansion panel-->
+              <div class="expansion-panel mt-10">
+                <mat-accordion>
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <fa-icon [icon]="createIcon"></fa-icon>&nbsp;More details
+                      </mat-panel-title>
+                      <mat-panel-description> Add more details</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <!--body-->
+                    <mat-form-field appearance="outline" formArrayName="storageAreas">
+                      <mat-label>Storage Area(s)</mat-label>
+                      <mat-chip-list #chipList aria-label="Storage selection">
+                        <mat-chip
+                          *ngFor="let storage of selectedStorageAreas;let i = index"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          color="primary"
+                          (removed)="removeStorageArea(i)">
+                          {{storage.name}}
+                          <fa-icon matChipRemove [icon]="cancelIcon"  *ngIf="removable">cancel</fa-icon>
+                        </mat-chip>
+                        <input
+                          placeholder="Storage Area(s)"
+                          #storageAreasInput
+                          [formControl]="storageAreasInputCtrl"
+                          [matAutocomplete]="autoComp1"
+                          [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addStorageArea($event)">
+                      </mat-chip-list>
+                      <mat-autocomplete #autoComp1="matAutocomplete" (optionSelected)="selectedStorageArea($event)">
+                        <mat-option *ngFor="let $storage of filteredAreas | async" [value]="$storage">
+                          {{$storage.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" formArrayName="suppliers">
+                      <mat-label>Supplier(s)</mat-label>
+                      <mat-chip-list #chipList2 aria-label="Supplier selection">
+                        <mat-chip
+                          *ngFor="let supplier of selectedSuppliers;let i = index"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          color="primary"
+                          (removed)="removeSupplier(i)">
+                          {{supplier.name}}
+                          <fa-icon matChipRemove [icon]="cancelIcon"  *ngIf="removable">cancel</fa-icon>
+                        </mat-chip>
+                        <input
+                          placeholder="Supplier(s)"
+                          #supplierInput
+                          [formControl]="supplierInputCtrl"
+                          [matAutocomplete]="autoComp2"
+                          [matChipInputFor]="chipList2"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addSupplier($event)">
+                      </mat-chip-list>
+                      <mat-autocomplete #autoComp2="matAutocomplete" (optionSelected)="selectedSupplier($event)">
+                        <mat-option *ngFor="let $supp of filteredSuppliers | async" [value]="$supp">
+                          {{$supp.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>Low stock level</mat-label>
+                      <input type="text" matInput placeholder="Min order quantity" formControlName="minOrderQuantity" />
+                    </mat-form-field>
+
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+            <div class="col-sm-3 px-4 pt-8 bg-theme-primary text-white">
+              <h3>New Inventory item</h3>
+              <div class="pl-6">
+                  <p class="mb-4">Inventory items can be added as ingredient components of menu items</p>
+                  <p class="mb-4">Units can be specified in weight(KG, g) or Volumes(L, ml) or as unit counted objects: <strong>EACH (EA)</strong></p>
+                  <p class="mb-4">nudle would notify you when your inventory quantity goes beyon <strong>Low stock level</strong></p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer text-right shadow-inner">
+      <span>
+        <button (click)="this.toggleCreateItemModal();" mat-raised-button>cancel</button>
+      </span>
+      <span class="ml-2">
+        <button (click)="formAction()" mat-raised-button class="bg-theme-primary text-theme-bg">save</button>
+      </span>
+    </div>
+  </section>
+
+<!--  modify item quantity modal-->
+  <section id="modifyItemQty" class="top-modal">
+    <div class="small-view w-1/2 shadow-lg bg-theme-bg">
+      <div class="content">
+        <div class="header">
+          <h3 class="text-theme-primary">Modify {{modifyItemQuantityName | titlecase}}'s quantity</h3>
+        </div>
+        <div class="body row" style="padding: 0.75rem;" [formGroup]="itemQuantityForm">
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-select formControlName="mode">
+                <mat-option value="1">Add</mat-option>
+                <mat-option value="0">Deduct</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Quantity</mat-label>
+              <input type="number" formControlName="changeQuantity" matInput placeholder="Quantity" />
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2 px-0 pt-2 text-2xl">{{modifyItemQuantityUnits}}</div>
+        </div>
+      </div>
+      <div class="footer text-right">
+        <span class=""><button (click)="alterItemQty()" mat-raised-button class="bg-theme-primary text-theme-bg">Save</button></span>
+        <span class="ml-2"><button (click)="toggleModal('#modifyItemQty')" mat-raised-button>cancel</button></span>
+      </div>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,184 @@
+<section class="h-full w-full">
+<!--  tabs-->
+  <section id="body">
+    <div id="recent-container" class="border-b border-theme-default ">
+      <!--place holder element, displays when there are no recent items...-->
+      <div *ngIf="recentItems.length === 0" class="fill-element flex justify-center align-items-center">
+        <img src="assets/images/nothing.png" class="h-10" alt="t">&nbsp;
+        <h4>No recent items</h4>
+      </div>
+      <!-- elements in recent container-->
+      <h4 class="px-8 recent-items-container-title"><small>Recent items</small></h4>
+      <div
+        cdkDropList
+        #recentItemsList="cdkDropList"
+        [cdkDropListData]="recentItems"
+        [cdkDropListConnectedTo]="[selectedItemsList]"
+        (cdkDropListDropped)="drop($event)"
+        class="recent-items-container whitespace-no-wrap overflow-y-hidden py-2 px-3 whitespace-no-wrap">
+        <div *ngFor="let item of recentItems;let i = index;" class="recent-item bg-theme-bg shadow border border-theme-default px-2 rounded flex align-items-center" cdkDrag>
+          <h4 class="overflow-hidden inline-block px-2 py-2" style="text-overflow: ellipsis">
+            <span class="text-theme-accent"><fa-icon [icon]="recentItemIcon"></fa-icon></span>&nbsp;
+            {{item.name}}</h4>
+        </div>
+      </div>
+
+    </div>
+    <div class="pos-action pt-4 relative">
+      <!-- loader -->
+      <div *ngIf="showSavePlaceholder" class="container-placeholder">
+        <div class="center-container text-center">
+          <div><mat-spinner mode="indeterminate" [strokeWidth]="10" [diameter]="75"></mat-spinner></div>
+          <div class="my-6"><h3 class="px-6 py-3 bg-theme-bg text-theme-fg">Saving...</h3></div>
+        </div>
+      </div>
+      <!--      -->
+      <div class="pos-action-head">
+        <div class="row h-full" [formGroup]="saleForm">
+          <div class="col-sm-3">
+            <div class="form">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Invoice number</mat-label>
+                <input type="text" formControlName="invoiceNumber" placeholder="Invoice number" readonly matInput>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-6 text-center py-2 clearfix">
+            <button mat-stroked-button class="bg-green-lightest">
+              <span class="text-green-dark">Total: {{totalCartAmount | currency: config_currency + ' ':'symbol': '1.0'}}</span>
+            </button>
+<!--            warnig  icon-->
+            <button *ngIf="!config.getAllConfig().printer_name" [routerLink]="'/master/settings/printer'" class="bg-yellow-lightest text-yellow-darker border-yellow-darker rounded p-3 float-right">
+              <span class="mr-4"><fa-icon [icon]="warningIcon"></fa-icon> Printer not configured</span>
+              <span class="underline text-sm">Fix</span>
+            </button>
+          </div>
+          <div class="col-sm-3 text-right">
+            <button [disabled]="this.selectedItems.length === 0" (click)="completeOrder()" class="bg-theme-primary text-theme-bg" mat-raised-button>
+              <fa-icon [icon]="completeIcon"></fa-icon>&nbsp;
+              Complete order
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="selected-section px-1">
+        <div
+          cdkDropList
+          #selectedItemsList="cdkDropList"
+          [cdkDropListData]="selectedItems"
+          [cdkDropListConnectedTo]="[recentItemsList]"
+          (cdkDropListDropped)="drop($event)"
+          class="relative border border-theme-default bg-theme-bg rounded-b h-full overflow-y-auto">
+          <!--              placeholder container-->
+          <div *ngIf="selectedItems.length < 1" class="bg-grey-lightest rounded w-full flex h-16 justify-center align-items-center h-full absolute" style="z-index:1;top: 0;bottom: 0;right: 0;left: 0;">
+            <h4>Type menu item's name below to add item to list.</h4>
+          </div>
+          <div class="">
+            <div class="label row h-6 text-xs bg-grey-lightest py-1 border-b border-theme-default">
+              <p class="col-sm-1"></p>
+              <p class="col-sm-4">Item</p>
+              <p class="col-sm-2">Quantity</p>
+              <p class="col-sm-3">Amount</p>
+            </div>
+            <div cdkDrag *ngFor="let item of selectedItems; let i = index;"
+                 matTooltip="Attempting to order more quantity than available" matTooltipPosition="above" [matTooltipDisabled]="!(item.stackable && item.orderQuantity > item.quantity)"
+                 [ngClass]="{'cart-item-error': item.stackable && item.orderQuantity > item.quantity}"
+                 class="cart-item row flex align-items-center border-b border-theme-default flex align-items-center h-16">
+              <div class="col-sm-1">
+                <p class="rounded-full w-10 h-10 text-white bg-theme-accent flex justify-center align-items-center">
+                  <span>{{item.name[0].toUpperCase()}}</span>
+                </p>
+              </div>
+              <div class="col-sm-4">
+                <p>{{item.name | titlecase}}</p>
+              </div>
+              <div class="col-sm-2 pr-0"><input class="w-full shadow p-2" type="number" min="1" (change)="onQuantityModify(i)" [(ngModel)]="item.orderQuantity"></div>
+              <div class="col-sm-3"><span class="font-bold">{{item.amount | currency: config_currency + ' ':'symbol': '1.0'}}</span></div>
+              <div class="col-sm-2 text-center">
+                <small class="rounded-full cursor-pointer hover:bg-grey-lighter border py-1 px-2 text-xs" (click)="removeFromList(i)"><fa-icon [icon]="deleteIcon"></fa-icon> remove</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="select-item row px-1 relative">
+      <div id="item-search-popup" class="bg-theme-bg">
+        <ul class="h-full">
+          <li *ngIf="noSearchResults" class="h-full flex align-items-center justify-center border-0 h-full">
+            <h4 class="font-bold text-center">No results.&nbsp;&nbsp;&nbsp;&nbsp;<small (click)="closeSearchPopUp()" class="underline text-xs cursor-pointer">close</small></h4>
+          </li>
+          <li *ngFor="let item of searchQueries | async; let i = index;" (click)="addItemToCartForm(item)" class="cursor-pointer">
+            <div class="row align-items-center">
+              <div class="col-sm-1">
+                <p class="h-12 w-12 bg-theme-accent text-white rounded-full flex justify-center align-items-center uppercase">
+                  {{item.name[0]}}
+                </p>
+              </div>
+              <div class="col-sm-6">
+                <h3 class="text-theme-fg font-hairline">{{item.name}}</h3>
+                <p class="text-green-darker">
+                  <small class="bg-green-lightest text-green-dark text-xs py-1 px-2 rounded-full">
+                    {{ item.unitPrice | currency: config_currency+ ' ': 'symbol': '1.0'}}
+                  </small>
+                </p>
+              </div>
+              <div class="col-sm-3"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="action-row row w-full h-full" [formGroup]="itemCartForm">
+        <div class="action-col col-sm-6 border-r border-theme-default">
+          <p><small>Item name</small></p>
+          <div><input (keyup)="search($event.target.value)" type="search" formControlName="name" placeholder="Type menu item's name"></div>
+        </div>
+        <div class="action-col col-sm-2 border-r border-theme-default">
+          <p><small>Quantity</small></p>
+          <div><input type="number" formControlName="orderQuantity" placeholder="Quantity" min="1"></div>
+        </div>
+        <div class="action-col col-sm-2 border-r border-theme-default">
+          <p><small>Price({{config_currency}})</small></p>
+          <div><input type="number" placeholder="Price" formControlName="unitPrice" min="1" /></div>
+        </div>
+        <!--            <div class="action-col col-sm-2 border-r border-theme-default">-->
+        <!--              <p><small>Discount (%)</small></p>-->
+        <!--              <div><input type="number" placeholder="Discount" formControlName="discount" min="1" /></div>-->
+        <!--            </div>-->
+        <div class="action-col col-sm-2 text-center">
+          <p class=""><small>Add to list</small></p>
+          <button (click)="addItemToList()" mat-raised-button class="bg-theme-primary text-theme-bg"><fa-icon [icon]="addIcon"></fa-icon> Add</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- context menus-->
+<!--<context-menu>-->
+<!--  <ng-template contextMenuItem (execute)="showMessage($event)">-->
+<!--   <fa-icon class="icons" [icon]="copyIcon"></fa-icon> copy-->
+<!--  </ng-template>-->
+<!--  <ng-template contextMenuItem (execute)="showMessage($event)">-->
+<!--    paste-->
+<!--  </ng-template>-->
+<!--  <ng-template contextMenuItem divider="true"></ng-template>-->
+<!--  <ng-template contextMenuItem let-item (execute)="showMessage($event)">-->
+<!--    replicate-->
+<!--  </ng-template>-->
+<!--</context-menu>-->
+
+<!--<div style="padding: 0;" class="col-sm-7">-->
+<!--  <div class="pos">-->
+<!--    <div class="categories">-->
+<!--                  <div cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)">-->
+<!--                    <div class="example-box" cdkDrag [contextMenu]="basicMenu" [contextMenuSubject]="'drinks'">Drinks</div>-->
+<!--                    <div class="example-box" cdkDrag [contextMenu]="basicMenu" [contextMenuSubject]="'burgers'">Burgers</div>-->
+<!--                    <div class="example-box" cdkDrag [contextMenu]="basicMenu" [contextMenuSubject]="'shawarma'">Sharwarmas</div>-->
+<!--                    <div class="example-box" cdkDrag [contextMenu]="basicMenu" [contextMenuSubject]="'cocktails'">Cocktails</div>-->
+<!--                  </div>-->
+
+<!--    </div>-->
+<!--    <div class="items"></div>-->
+<!--  </div>-->
+<!--</div>-->

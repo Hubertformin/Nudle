@@ -1,0 +1,29 @@
+<section id="view" class="row relative h-full">
+  <div class="col-sm-3 master border-r py-6">
+    <div class="form border-b border-theme-default pb-4">
+      <h2 class="my-1 text-theme-primary">Settings</h2>
+<!--      <mat-form-field appearance="standard">-->
+<!--        <mat-label>Search..</mat-label>-->
+<!--        <button class="px-2 text-theme-fg" matPrefix><fa-icon [icon]="searchIcon"></fa-icon></button>-->
+<!--        <input type="search" placeholder="Enter keyword" matInput />-->
+<!--      </mat-form-field>-->
+    </div>
+    <div class="view-nav py-3">
+      <ul class="list">
+        <li routerLink="/master/settings/profile" routerLinkActive="active" title="Profile"><span class="icon"><fa-icon [icon]="userIcon"></fa-icon></span> <span class="text">Profile</span></li>
+        <li routerLink="/master/settings/subscription" routerLinkActive="active" title="Subscription"><span class="icon"><fa-icon [icon]="subscriptionIcon"></fa-icon></span> <span class="text">Subscription</span></li>
+        <li routerLink="/master/settings/appearance" routerLinkActive="active" title="Appearance"><span class="icon"><fa-icon [icon]="appearanceIcon"></fa-icon></span> <span class="text">Appearance</span></li>
+        <li routerLink="/master/settings/language" routerLinkActive="active" title="Region & Language"><span class="icon"><fa-icon [icon]="languageIcon"></fa-icon></span> <span class="text">Region & Language</span></li>
+        <li routerLink="/master/settings/invoices" routerLinkActive="active" title="Sales & Invoices"><span class="icon"><fa-icon [icon]="invoiceIcon"></fa-icon></span> <span class="text">Sales & Invoices</span></li>
+<!--        <li routerLink="/master/settings/reports" routerLinkActive="active" title="Reports"><span class="icon"><fa-icon [icon]="reportsIcon"></fa-icon></span> <span class="text">Reports</span></li>-->
+        <li routerLink="/master/settings/printer" routerLinkActive="active" title="Printing"><span class="icon"><fa-icon [icon]="printerIcon"></fa-icon></span> <span class="text">Printing</span></li>
+        <li routerLink="/master/settings/start-up" routerLinkActive="active" title="Start up"><span class="icon"><fa-icon [icon]="startUpIcon"></fa-icon></span> <span class="text">Start up</span></li>
+        <li routerLink="/master/settings/privacy" routerLinkActive="active" title="Privacy"><span class="icon"><fa-icon [icon]="privacyIcon"></fa-icon></span> <span class="text">Privacy</span></li>
+        <li routerLink="/master/settings/about" routerLinkActive="active" title="About"><span class="icon"><fa-icon [icon]="aboutIcon"></fa-icon></span> <span class="text">About</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-9 detail py-8">
+    <router-outlet></router-outlet>
+  </div>
+</section>

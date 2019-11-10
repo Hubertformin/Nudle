@@ -1,0 +1,28 @@
+<section>
+  <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Invoices</h2>
+</section>
+<section class="px-2 py-4 my-2">
+  <div class="settings-view-item">
+    <h4 class="title">Auto complete sales</h4>
+    <p class="description text-theme-primary">Automatically set payment status of a sale to paid <br> when the sale is recorded at the point of sale.</p>
+    <span class="action"><mat-slide-toggle color="primary" [(ngModel)]="autocompleteSales" (change)="saveSettings()"></mat-slide-toggle></span>
+  </div>
+  <div class="settings-view-item">
+    <h4 class="title">Assign orders to a waiter</h4>
+    <p class="description text-theme-primary">Assign each order to staff member (waiter)</p>
+    <span class="action"><mat-slide-toggle color="primary" [(ngModel)]="assignWaiter" (change)="saveSettings()"></mat-slide-toggle></span>
+  </div>
+</section>
+<section class="border-t border-theme-default py-4 px-6">
+  <ol>
+    <li>
+      <h4>Auto complete sales</h4>
+      <p>This marks all sale entries a status of paid.</p>
+    </li>
+    <li>
+      <h4>Assigning orders.</h4>
+      <p>This mode marks each sale entry to a waiter, preferably the waiter who took the order from the customer.</p>
+    </li>
+  </ol>
+
+</section>

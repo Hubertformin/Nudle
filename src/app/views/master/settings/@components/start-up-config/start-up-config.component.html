@@ -1,0 +1,27 @@
+<section>
+  <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">On start up</h2>
+  <div class="body">
+    <div class="settings-view-item">
+      <h4 class="title">Default page</h4>
+      <p class="description text-theme-primary">Show this page on start up</p>
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-select>-->
+<!--          <mat-option value="dashboard">Dashboard</mat-option>-->
+<!--          <mat-option value="reports">Reports</mat-option>-->
+<!--          <mat-option value="invoices">Invoices</mat-option>-->
+<!--          <mat-option value="settings">Settings</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+      <div class="py-5 px-8">
+        <mat-radio-group (change)="onStartUpSelect($event)" [formControl]="startUpValue">
+<!--          <mat-radio-button value="dashboard">Dashboard</mat-radio-button>-->
+          <br><br>
+          <mat-radio-button value="point-of-sale">Point of sale</mat-radio-button>
+          <br><br>
+          <mat-radio-button value="sales-manager">Sales Manager</mat-radio-button>
+          <br><br>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+</section>

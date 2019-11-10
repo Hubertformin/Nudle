@@ -1,0 +1,52 @@
+<!--
+<section class="h-full w-full">
+  <div class="header pt-6 px-6 border-b border-theme-default">
+    <div class="title">
+      <h2 class="text-theme-primary font-hairline">
+        <fa-icon  [icon]="branchIcon"></fa-icon>&nbsp;Branches
+      </h2>
+    </div>
+    <div class="row py-2">
+      <div class="col-sm-6"></div>
+      <div class="col-sm-6 text-right">
+        &lt;!&ndash; route to a different url if clicked.&ndash;&gt;
+        <button [routerLink]="'/master/branches/add'" style="border:1px solid #ddd;" mat-flat-button>Add Branch</button>
+      </div>
+    </div>
+  </div>
+  <div class="body pt-6 pb-4 px-8">
+    <div class="list">
+&lt;!&ndash;      branches&ndash;&gt;
+      <div *ngFor="let branch of branches; let i = index;" class="h-card shadow border border-theme-default mb-3 rounded h-16">
+        <div class="row align-items-center h-full w-full">
+          <div class="col-sm-2 relative">
+            <span class="bg-theme-accent img-icon relative text-white">{{branch.name[0].toUpperCase()}}
+              <span style="bottom:-15%;transform: scale(0.7);right:-19%;" class="bg-green text-theme-bg absolute flex justify-center align-items-center rounded-full h-8 w-8">
+              <fa-icon [icon]="activeBranchIcon"></fa-icon>
+            </span>
+            </span>
+          </div>
+          <div class="col-sm-4">
+            <p class="display-text">{{branch.name | titlecase}}</p>
+          </div>
+          <div class="col-sm-4">
+            <span class="px-2 py-1 text-xs rounded-full text-green-darkest bg-green-lightest">
+             &lt;!&ndash; icon: [icon] is binded from the .ts file &ndash;&gt;
+              <fa-icon [icon]="locationIcon"></fa-icon>&nbsp;{{branch.location | titlecase}}
+            </span>
+          </div>
+          <div class="col-sm-2 text-right">
+            &lt;!&ndash; Visit: https://material.angular.io about-config menu triggers &ndash;&gt;
+            <button mat-icon-button [matMenuTriggerFor]="menuRole" style="border: 1px solid #ddd;"><fa-icon [icon]="dropDownIcon"></fa-icon></button>
+            <mat-menu #menuRole="matMenu">
+&lt;!&ndash;              <button mat-menu-item (click)="setAsDefault(i)"><fa-icon [icon]="checkIcon"></fa-icon>&nbsp;&nbsp;Set as current branch</button>&ndash;&gt;
+              <button mat-menu-item><fa-icon [icon]="editIcon"></fa-icon>&nbsp;&nbsp;Edit</button>
+              <button mat-menu-item (click)="deleteBranch(i)"><fa-icon [icon]="deleteIcon"></fa-icon>&nbsp;&nbsp;Delete</button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->

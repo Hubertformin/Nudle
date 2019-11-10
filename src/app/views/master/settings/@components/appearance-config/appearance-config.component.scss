@@ -1,0 +1,47 @@
+.theme-box {
+  height: 65px;
+  width: 65px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2.2rem;
+  // border: 1px solid #DDDDDD;
+  position: relative;
+  &.active {
+    transform: scale(1.1);
+    // outline: 1px solid #ddd !important;
+    .active-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+    }
+  }
+  &.default-theme {
+    background-color: #1f9d55;
+  }
+  &.pink-theme {
+    background-color: #d81b60;
+  }
+  &.teal-theme {
+    background-color: #00695C;
+  }
+  &.blue-theme {
+    background-color: #0f6af3;
+  }
+  // dark theme
+  &.dark-pink {
+    background-color: rgba(235, 16, 61, 0.98);
+  }
+  &.dark-purple {
+    background-color: #2f365f;
+  }
+  &.dark-orange {
+    background-color: #de751f;
+  }
+
+}

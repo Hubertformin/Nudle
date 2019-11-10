@@ -1,0 +1,289 @@
+<!--
+  ~ Copyright (c) 2019. A production of Enchird-Tech, all rights reserved, no part of the project should be reproduces with prior
+  ~ concern of authorized personnel.
+  -->
+<section #getStartedBanner id="set-up" class="h-full bg-white">
+  <img src="assets/images/start-up-banner-1.png" alt="" class="banner">
+  <div class="content py-3 px-4">
+    <h4 class="px-4 font-hairline">Welcome to</h4>
+    <img src="assets/images/logo-0.75x.png" alt="">
+    <p class="my-3">
+      <button (click)="getStartedBanner.style.display = 'none'" class="px-6 py-3 rounded-full bg-custom-green text-white" mat-ripple>Get started</button>
+    </p>
+  </div>
+</section>
+
+<!--steppers-->
+<section id="stepper-container" class="h-full">
+<!--  header-->
+  <section id="header" class="row px-4 align-items-center border-b border-theme-default">
+    <div class="col-sm-2">
+      <img class="inline-block" src="assets/images/logo-0.75x.png" alt="">
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div class="col-sm-4">
+      <div class="inline-block text-theme-primary font-bold">Set up your application.</div>
+    </div>
+  </section>
+<!--  body-->
+  <section id="body">
+    <div class="row h-full">
+      <div class="col-sm-2 h-full bg-theme-primary"></div>
+      <div class="col-sm-10 h-full relative">
+<!--        loader placeholder-->
+        <section *ngIf="finishingLoader" class="placeholder fill-element flex"
+                 style="background-color: rgba(255, 255, 255, 0.89)">
+          <div class="center-container text-center">
+            <div class="flex justify-center">
+              <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+            </div>
+            <p class="my-4 font-bold">Please wait while we apply your preferences..</p>
+          </div>
+        </section>
+<!--        -->
+        <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="stepChanged($event)">
+          <!-- change default 'edit' icon -->
+          <ng-template matStepperIcon="edit">
+            <fa-icon [icon]="checkIcon"></fa-icon>
+          </ng-template>
+<!--          <mat-step class="h-full">-->
+<!--            <form class="h-full">-->
+<!--              <ng-template matStepLabel>Activation</ng-template>-->
+<!--              <div class="w-3/4 py-4">-->
+<!--                <div class="py-6 px-8 mb-16 shadow rounded-lg">-->
+<!--                  <h1 class="text-theme-primary pb-3">Activate your software</h1>-->
+<!--                  <ol class="custom-list">-->
+<!--                    <li>Enter your product key</li>-->
+<!--                    <li>If you don't have one, head on to <a (click)="openLink('https://enchirdentity.com/nudle/buy-licence')" href="#">-->
+<!--                      https://enchirdentity.com/nudle/buy-licence</a>-->
+<!--                    </li>-->
+<!--                    <li>A good internet connection is required to activate this software.</li>-->
+<!--                  </ol>-->
+<!--                </div>-->
+<!--                <mat-form-field appearance="outline" floatLabel="always">-->
+<!--                  <mat-label>Activation key</mat-label>-->
+<!--                  <input type="text" matInput mask="AAAA-AAAA-AAAA-AAAA-AAAA-AAAA" placeholder="XXXX-XXXX-XXXX-XXXXX-XXXX-XXXX" />-->
+<!--                </mat-form-field>-->
+<!--              </div>-->
+<!--              <div class="">-->
+<!--                <span class="mr-3">-->
+<!--                  <button mat-raised-button matStepperNext color="primary">Activate</button>-->
+<!--                </span>-->
+<!--                <button mat-raised-button matStepperNext color="accent">Try for 30 days</button>-->
+<!--              </div>-->
+<!--            </form>-->
+<!--          </mat-step>-->
+          <mat-step [stepControl]="regionFormGroup" class="h-full">
+            <form [formGroup]="regionFormGroup" class="h-full">
+              <ng-template matStepLabel>Region</ng-template>
+              <div class="row py-16">
+                <div class="col-sm-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select country</mat-label>
+                    <mat-select (selectionChange)="countrySelected($event.value)" formControlName="country" required>
+                      <mat-option *ngFor="let country of supportedLocales;let i = index" [value]="country.name">{{country.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select State</mat-label>
+                    <mat-select (selectionChange)="stateSelected($event.value)" formControlName="state" required>
+                      <mat-option *ngFor="let state of statesModel;let i = index" [value]="state">{{state}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select City</mat-label>
+                    <mat-select (selectionChange)="citySelected($event.value)" formControlName="city" required>
+                      <mat-option *ngFor="let city of cityModel;let i = index" [value]="city.name">{{city.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Currency</mat-label>
+                    <input type="text" readonly placeholder="Currency" matInput formControlName="currency">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="stepper-footer text-right">
+                <span class="mr-2"><button mat-raised-button matStepperPrevious>Back</button></span>
+                <button mat-raised-button matStepperNext color="primary">Next</button>
+              </div>
+            </form>
+          </mat-step>
+<!--           -->
+          <mat-step [stepControl]="organizationFormGroup">
+            <form [formGroup]="organizationFormGroup">
+              <ng-template matStepLabel>Organization</ng-template>
+<!--              -->
+              <div class="row h-full">
+                <div class="col-sm-9 overflow-auto h-full pb-10 pt-4">
+                  <div class="row">
+                    <div class="col-sm-12 border-b border-theme-default py-2 mb-2 relative">
+                      <h4 class="text-theme-primary-light font-hairline">Organization's Info</h4>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Organization's name</mat-label>
+                        <input (change)="save()" #c_name type="text" placeholder="Organization's name" formControlName="company_name" matInput>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+<!--                      <p class="underline px-4 mt-2 py-2 rounded-lg bg-green-lightest shadow-inner">-->
+<!--                        <small>{{encodeUrl('https://nudle.enchirdentity.com/' + c_name.value)}}</small>-->
+<!--                      </p>-->
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Street address</mat-label>
+                        <input (change)="save()" type="text" placeholder="Street address" formControlName="company_address" matInput>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!--      contact-->
+                  <div class="row">
+                    <div class="col-sm-12 border-b border-theme-default py-2 mb-2 relative">
+                      <h4 class="text-theme-primary-light col-sm-12 font-hairline">Primary contact</h4>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <button class="pr-1 text-theme-fg" matPrefix>+{{setup_phone_code.value}}</button>
+                        <mat-label>Phone</mat-label>
+                        <input (change)="save()" type="text" placeholder="Phone" matInput style="letter-spacing: 0.2rem;" formControlName="company_phone" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input (change)="save()" type="text" placeholder="Email" formControlName="company_email" matInput />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-12">
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>Website</mat-label>
+                        <button matPrefix class="pr-1 text-theme-fg">http://</button>
+                        <input (change)="save()" type="text" placeholder="Website" matInput formControlName="company_website" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 border-l border-theme-default text-center py-4">
+                  <p class="mb-2"><span>Add company logo</span></p>
+                  <div class="h-32 mb-4 w-full">
+                    <img id="logo_img" src="assets/images/company-avatar.png" class="w-auto h-full rounded" />
+                  </div>
+                  <input id="company-logo-img" #select_logo type="file" style="display: none;" accept="image/*" (change)="onImageSelect($event)">
+                  <button (click)="select_logo.click()" mat-button style="border: 1px solid #ddd;">Add photo</button>
+                </div>
+              </div>
+<!--              -->
+              <div class="stepper-footer text-right">
+                <span class="mr-2"><button mat-raised-button matStepperPrevious>Back</button></span>
+                <button mat-raised-button matStepperNext color="primary">Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <!--          -->
+          <mat-step>
+            <ng-template matStepLabel>Account</ng-template>
+            <form action="#" class="py-4 row" [formGroup]="accountFormGroup">
+              <div class="col-sm-7 border-theme-default border-r">
+                <h4 class="text-theme-primary border-b border-theme-default pb-1 mb-4">Basic info</h4>
+                <div class="row pb-2">
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>First name</mat-label>
+                      <input matInput placeholder="First name" formControlName="firstName" />
+                      <!--                    <mat-hint *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"><span class="text-red">A valid name is required</span></mat-hint>-->
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Last name</mat-label>
+                      <input matInput placeholder="Last name" formControlName="lastName" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Phone number (optional)</mat-label>
+                      <input matInput placeholder="Phone number (optional)" formControlName="phoneNumber" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Select gender</mat-label>
+                      <mat-select formControlName="gender">
+                        <mat-option value="male">Male</mat-option>
+                        <mat-option value="female">Female</mat-option>
+                        <mat-option value="other">Other</mat-option>
+                      </mat-select>
+                      <!--                    <mat-hint *ngIf="gender.invalid && (gender.dirty || gender.touched)"><span class="text-red">Please select user's gender</span></mat-hint>-->
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row"></div>
+              </div>
+              <div class="col-sm-5">
+                <h4 class="text-theme-primary border-b border-theme-default pb-1 mb-4">Login Details</h4>
+                <p>Details would be required at login screen</p>
+                <div class="">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input type="text" matInput formControlName="userName" placeholder="Username">
+                  </mat-form-field>
+                </div>
+                <div class="">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input type="password" formControlName="password" matInput placeholder="Password">
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- -->
+              <div class="stepper-footer text-right">
+                <span class="mr-2"><button mat-raised-button matStepperPrevious>Back</button></span>
+                <!--              <button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>-->
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <!--          -->
+          <mat-step>
+            <ng-template matStepLabel>Finish up</ng-template>
+            <h3 class="mb-2">Just a few more things to get you started.</h3>
+            <p class="border-theme-default border-b mb-4 pb-3">Click finish if you want set this up later in settings</p>
+            <form [formGroup]="finishFormGroup" class="py-4">
+              <div class="row pb-4 border-b">
+                <div class="col-sm-5 px-6">
+                  <h5 class="mb-4">Printer</h5>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select default printer</mat-label>
+                    <mat-select formControlName="defaultPrinterName">
+                      <mat-option *ngFor="let printer of printersList; let i = index;" [value]="printer.name">{{printer.name}}</mat-option>
+                    </mat-select>
+                    <mat-hint>The selected printer would be used as the default to print receipts.</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-7">
+                  <h4 class="text-theme-primary">Can't find printer?</h4>
+                  <ul class="pl-8">
+                    <li>Make sure you have installed your printer's drivers. (Usually the contents in the disk that comes with the printer)</li>
+                    <li>Update your computer's drivers</li>
+                  </ul>
+                </div>
+              </div>
+            </form>
+            <div class="stepper-footer text-right">
+              <span class="mr-2"><button mat-raised-button matStepperPrevious>Back</button></span>
+<!--              <button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>-->
+              <button mat-raised-button color="primary" (click)="finishSetup()">Finish</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </div>
+    </div>
+  </section>
+</section>

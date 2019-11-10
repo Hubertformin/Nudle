@@ -1,0 +1,86 @@
+<section>
+  <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed">Printing</h2>
+</section>
+<section [formGroup]="formGroup">
+  <mat-tab-group class="h-full">
+    <mat-tab class="h-full" label="General">
+      <div class="mt-4 general">
+        <div class="row pb-4 border-b">
+          <div class="col-sm-5 px-6">
+            <h5 class="mb-4">Printer</h5>
+            <mat-form-field appearance="outline">
+              <mat-label>Select default printer</mat-label>
+              <mat-select (selectionChange)="updateSettings()" formControlName="defaultPrinterName">
+                <mat-option *ngFor="let printer of printersList; let i = index;" [value]="printer.name">{{printer.name}}</mat-option>
+              </mat-select>
+              <mat-hint>The selected printer would be used as the default to print receipts.</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-7">
+            <h4 class="text-theme-primary">Can't find printer?</h4>
+            <ul class="pl-8">
+              <li>Make sure you have installed your printer's drivers. (Usually the contents in the disk that comes with the printer)</li>
+              <li>Update your computer's drivers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Atrributes -->
+      <div id="encoding" class="print-attributes pt-2 border-theme-default pt-2 pb-4 px-6">
+        <h5 class="mb-4">Input</h5>
+        <div class="row">
+          <div class="col-sm-4">
+            <mat-radio-group formControlName="printEncodeType" (change)="onSelectEncoding($event)">
+              <mat-radio-button value="barCode">Barcode</mat-radio-button>
+              <br><br>
+              <mat-radio-button value="qrCode">QR code</mat-radio-button>
+              <br><br>
+              <mat-radio-button value="none">none</mat-radio-button>
+              <br><br>
+            </mat-radio-group>
+          </div>
+          <div class="col-sm-6 px-0">
+            <div class="px-0" [ngClass]="{'invisible': encode_type === 'none'}">
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  {{encode_type === 'barCode' ? 'Bar code' : (encode_type === 'qrCode' ? 'QR code': '')}} Content</mat-label>
+                <mat-select (selectionChange)="updateSettings()" formControlName="printEncodeText">
+                  <mat-option value="invoiceNumber">Invoice number</mat-option>
+                  <mat-option [value]="company_name">{{company_name}}</mat-option>
+                  <mat-option
+                          *ngIf="company_website"
+                          [value]="company_website">{{company_website}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-divider></mat-divider>
+            <div>
+              <h5 class="my-3">Receipt message</h5>
+              <mat-form-field appearance="outline">
+                <textarea (change)="updateSettings()" formControlName="printMessage" rows="3" placeholder="Printer Message" matInput></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab class="h-full" label="Configuration">
+      <!--  config section-->
+      <div class="mt-4 config-section">
+        <div class="px-8 w-1/2 pt-2 pb-4">
+          <h5 class="mb-4">Configurations</h5>
+          <mat-form-field appearance="outline">
+            <mat-label>Timeout per line</mat-label>
+            <input type="number" matInput (change)="updateSettings()" formControlName="timeOut" />
+          </mat-form-field>
+        </div>
+        <!--  preview toggle-->
+        <div class="settings-view-item">
+          <h4 class="title">Preview</h4>
+          <p class="description text-theme-primary">Preview printer job in window</p>
+          <span class="action"><mat-slide-toggle color="primary" formControlName="preview" (change)="updateSettings()"></mat-slide-toggle></span>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>

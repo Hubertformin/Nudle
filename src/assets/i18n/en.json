@@ -1,0 +1,82 @@
+{
+  "SIDENAV": {
+    "SALES": {
+      "TITLE": "Sales",
+      "INVOICE": "Point of sale",
+      "RECORDED_INVOICES": "Sales Manager",
+      "ORDERS": "Expenses",
+      "WASTE_EVENTS": "Waste Events"
+    },
+    "MENU": {
+      "TITLE": "Menu",
+      "CATEGORIES": "Categories",
+      "MENU_ITEMS": "Menu Items",
+      "TABLES": "Tables",
+      "INVENTORY": "Inventory",
+      "COOK_BOOK": "Cook Book"
+    },
+    "HUMAN_RESOURCE": {
+      "TITLE": "Human resource",
+      "USERS": "Users & roles",
+      "STAFF_GROUPS": "Staff Groups"
+    },
+    "ORGANIZATION": {
+      "TITLE": "Organization",
+      "COMPANY": "Company",
+      "STORES": "Branches"
+    },
+    "REPORTS": {
+      "TITLE": "Reports",
+      "DASHBOARD": "Dashboard",
+      "USERS_ACTIVITY": "Users Activity",
+      "REPORTS": "Reports"
+    },
+    "SETTINGS": {
+      "TITLE": "Settings",
+      "PREFERENCES": "Settings"
+    }
+
+  },
+  "VIEWS": {
+    "USER_GROUPS": {
+      "PAGE_ALERT": {
+        "TITLE": "User Groups",
+        "BODY": "Create and modify collection of users with specific permissions and control."
+      },
+      "ACTION_PANE": {
+        "BUTTON_NEW": "New"
+      },
+      "USER_GROUP_FORM": {
+        "TITLE": "Create new user's group",
+        "INPUT_NAME_LABEL": "Group name",
+        "INPUT_NAME_PLACEHOLDER": "Enter group name",
+        "PERMISSIONS": {
+          "TITLE": "Permissions",
+          "LABELS": {
+            "MENU_ITEMS": "Menu items",
+            "INVOICES": "Invoices",
+            "REPORTS": "Reports",
+            "USERS": "Users",
+            "ORDERS": "Orders"
+          },
+          "CHECK_OPTIONS": {
+            "VIEW": "View",
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "DELETE": "Delete"
+          }
+        },
+        "ACTION_BUTTONS": {
+          "SAVE": "save",
+          "CANCEL": "close"
+        }
+      }
+    },
+    "STAFF": {
+      "PAGE_ALERT": {
+        "TITLE": "Manage your staff board",
+        "BODY": "You can view , edit and remove users here"
+      }
+    }
+  }
+}

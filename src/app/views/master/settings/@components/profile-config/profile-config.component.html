@@ -1,0 +1,39 @@
+ <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Profile</h2>
+ <div class="header">
+    <mat-card>
+      <div class="row">
+        <div class="col-sm-2">
+          <img [src]="current_user.imageUrl | image" alt="" style="height: 75px;width: 75px;" class="rounded-full">
+        </div>
+        <div class="col-sm-6">
+          <h4>{{current_user.firstName + ' ' + current_user.lastName}}</h4>
+          <p class="text-grey-dark">{{current_user.group ? current_user.group.name : 'Staff'}}</p>
+        </div>
+        <div class="col-sm-4">
+          <span *ngIf="current_user.permissions.USERS_UPDATE" class="mr-2"><button [routerLink]="'/master/staff/edit/'+current_user.id" mat-stroked-button>Edit</button></span>
+          <span class="mr-2"><button (click)="auth.logOut()" mat-stroked-button>Sign out</button></span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+ <div class="body px-8 pt-4">
+   <div *ngIf="current_user.age" class="settings-view-item py-4">
+     <h4 class="title">Age</h4>
+     <p class="description text-theme-primary">{{current_user.age}}</p>
+   </div>
+   <div *ngIf="current_user.phoneNumber" class="settings-view-item py-4">
+     <h4 class="title">Phone number</h4>
+     <p class="description text-theme-primary">{{current_user.phoneNumber}}</p>
+   </div>
+   <div *ngIf="current_user.email" class="settings-view-item py-4">
+     <h4 class="title">Email</h4>
+     <p class="description text-theme-primary">{{current_user.email}}</p>
+   </div>
+<!--   line-->
+   <mat-divider></mat-divider>
+<!--   workshit-->
+   <div *ngIf="current_user.contractType" class="settings-view-item py-4">
+     <h4 class="title">Contract Type</h4>
+     <p class="description text-theme-primary">{{current_user.contractType}}</p>
+   </div>
+ </div>

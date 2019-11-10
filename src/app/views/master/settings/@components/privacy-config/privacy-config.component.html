@@ -1,0 +1,22 @@
+<section class="settings-vew py-8">
+  <h2 class="text-theme-primary py-2 mt-1 border-b border-dashed mb-4">Privacy</h2>
+  <div class="body">
+<!--    <div class="settings-view-item">-->
+<!--      <h4 class="title">Synchronize data.</h4>-->
+<!--      <p class="description text-theme-primary">Broad cast changes across all devices.</p>-->
+<!--      <span class="action"><mat-slide-toggle color="primary"></mat-slide-toggle></span>-->
+<!--    </div>-->
+    <!--        -->
+    <div class="settings-view-item">
+      <h4 class="title">Usage feedback</h4>
+      <p class="description text-theme-primary">Improve {{config.AppConfig.name}} by sending data on how you use {{config.AppConfig.name}}.</p>
+      <span class="action"><mat-slide-toggle [(ngModel)]="usage_feedback" (change)="onChange()" color="primary"></mat-slide-toggle></span>
+    </div>
+    <!--        -->
+    <div class="settings-view-item">
+      <h4 class="title">Location</h4>
+      <p class="description text-theme-primary">Allow nudle to access your location.</p>
+      <span class="action"><mat-slide-toggle [(ngModel)]="access_location" (change)="onChange()" color="primary"></mat-slide-toggle></span>
+    </div>
+  </div>
+</section>
